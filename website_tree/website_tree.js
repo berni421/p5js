@@ -94,7 +94,7 @@ class Data {
             return response;
         }
 
-        const siteNames = await fetch('data/site-names.csv')
+        const siteNames = await fetch('../data/site-names.csv')
             .then(handleErrors)
             .then(response => response.text())
             .catch(error => console.error("siteNames", error));
@@ -108,7 +108,7 @@ class Data {
                 name = site[0];
                 if ("name" !== name) {
                     // load Site                
-                    let fileName = "data/" + site[1];
+                    let fileName = "../data/" + site[1];
                     const siteData = await fetch(fileName)
                         .then(handleErrors)
                         .then(response => response.text())
