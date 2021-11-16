@@ -28,6 +28,7 @@ function draw() {
 
 function mousePressed() {
     // Redraw tree
+    items.next();
     doGraph("plotItems");
 }
 
@@ -35,7 +36,6 @@ function doItems() {
     print("doItems items.names[0]=", items.names[0]);
 
     createCanvas(MAXX, MAXY);
-    blendMode(DIFFERENCE);
 
     // set first graph
     doGraph("plotItems");
@@ -56,6 +56,7 @@ function doGraph(type) {
         let name = items.names[site];
         text(name, MAXX / 2, 0);
         print("title=", name);
+        //blendMode(DIFFERENCE);
     }
 
     title();
@@ -65,7 +66,7 @@ function doGraph(type) {
     let start = items.start[site];
 
     graph = new DisplayPollock(name, data);
-    for (var i = 0; i < 512; i++) {
+    for (var i = 0; i < 128; i++) {
         graph.plot();
         graph.next();
     }
@@ -195,40 +196,48 @@ class DisplayPollock {
         print("dataAsciiOnly =", dataAsciiOnly);
 
         // Extract data and colour channels
-        let size = 2;
-        let dataXArray = dataAsciiOnly.filter((value, index) => dataFilter(index, 0, size));
-        let dataYArray = dataAsciiOnly.filter((value, index) => dataFilter(index, 1, size));
+        let size = 3;
+        let dataRedArray = dataAsciiOnly.filter((value, index) => dataFilter(index, 0, size));
+        let dataGreenArray = dataAsciiOnly.filter((value, index) => dataFilter(index, 1, size));
+        let dataBlueArray = dataAsciiOnly.filter((value, index) => dataFilter(index, 2, size));
 
         // Store data
-        this.dataX = dataXArray.join("");
-        this.dataY = dataYArray.join("");
+        this.dataRed = dataRedArray.join("");
+        this.dataGreen = dataGreenArray.join("");
+        this.dataBlue = dataBlueArray.join("");
 
         // reset data counts
         this.start = 0; // Colour data is now stripped of unwanted values
         // minimum size of data
-        let xLength = this.dataX.length;
-        let yLength = this.dataY.length;
-        let sizes = [xLength, yLength];
+        let redLength = this.dataRed.length;
+        let greenLength = this.dataGreen.length;
+        let blueLength = this.dataBlue.length;
+        let sizes = [redLength, greenLength, blueLength];
         this.end = sizes.reduce((min, value) => minFilter(min, value), Infinity);
         print("end =", this.end);
 
         // Work out ranges of data
         let range = {
-            x: [MAXX, 0],
-            y: [MAXY, HEADER],
+            red: [255, 0],
+            green: [255, 0],
+            blue: [255, 0]
         };
 
         // Minimum Ranges
-        let minXValue = dataXArray.reduce(((min, value) => minFilter(min, value.charCodeAt(0))), MAXX);
-        let minYValue = dataYArray.reduce(((min, value) => minFilter(min, value.charCodeAt(0))), MAXY - HEADER);
-        range.x[0] = minXValue;
-        range.y[0] = minYValue;
+        let minRedValue = dataRedArray.reduce(((min, value) => minFilter(min, value.charCodeAt(0))), 255);
+        let minGreenValue = dataGreenArray.reduce(((min, value) => minFilter(min, value.charCodeAt(0))), 255);
+        let minBlueValue = dataBlueArray.reduce(((min, value) => minFilter(min, value.charCodeAt(0))), 255);
+        range.red[0] = minRedValue;
+        range.green[0] = minGreenValue;
+        range.blue[0] = minBlueValue;
 
         // Maximum Ranges
-        let maxXValue = dataXArray.reduce(((max, value) => maxFilter(max, value.charCodeAt(0))), 0);
-        let maxYValue = dataYArray.reduce(((max, value) => maxFilter(max, value.charCodeAt(0))), HEADER);
-        range.x[1] = maxXValue;
-        range.y[1] = maxYValue;
+        let maxRedValue = dataRedArray.reduce(((max, value) => maxFilter(max, value.charCodeAt(0))), 0);
+        let maxGreenValue = dataGreenArray.reduce(((max, value) => maxFilter(max, value.charCodeAt(0))), 0);
+        let maxBlueValue = dataBlueArray.reduce(((max, value) => maxFilter(max, value.charCodeAt(0))), 0);
+        range.red[1] = maxRedValue;
+        range.green[1] = maxGreenValue;
+        range.blue[1] = maxBlueValue;
 
         this.range = range;
         print("Range =", this.range);
@@ -243,20 +252,21 @@ class DisplayPollock {
 
     doPlot(type) {
         // Display splats, spills, and drags 
-        let xValue = this.dataX.charCodeAt(this.point);
-        let yValue = this.dataY.charCodeAt(this.point);
+        let x = random(MAXX);
+        let y = random(HEADER, MAXY);
 
-        let x = map(xValue, this.range.x[0], this.range.x[1], 0, MAXX);
-        let y = map(yValue, this.range.y[0], this.range.y[1], HEADER, MAXY);
+        let redValue = this.dataRed.charCodeAt(this.point);
+        let greenValue = this.dataGreen.charCodeAt(this.point);
+        let blueValue = this.dataBlue.charCodeAt(this.point);
 
-        let red = random(255);
-        let green = random(255);
-        let blue = random(255);
+        let red = map(redValue, this.range.red[0], this.range.red[1], 0, 255);
+        let green = map(greenValue, this.range.green[0], this.range.green[1], 0, 255);
+        let blue = map(blueValue, this.range.blue[0], this.range.blue[1], 0, 255);
 
         function splat(x, y) {
             // blob of paint
-            var width = random(100);
-            var height = random(100);
+            var width = random(40);
+            var height = random(40);
             var seedx = width / 4;
             var seedy = height / 4;
             var dx, dy;
@@ -305,7 +315,7 @@ class DisplayPollock {
             var dx, dy;
 
             stroke(red, green, blue);
-            for (var i = 0; i < 10; i++) {
+            for (var i = 0; i < 20; i++) {
                 dx = random(-1 * length, length);
                 dy = random(-1 * length, length);
                 width = random(1, 4);
