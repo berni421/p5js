@@ -26,6 +26,7 @@ function setup() {
         print("doItems items.names[0]=", items.names[0]);
 
         createCanvas(MAXX, MAXY);
+        resizeCanvas(MAXX, MAXY);
 
         // buttons
         choices.plotButton(doGraph);

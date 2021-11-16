@@ -7,6 +7,7 @@ function preload() {
 
 function setup() {
   createCanvas(512, 512);
+  resizeCanvas(512, 512);
   background(0); // black
   frameRate(60); // default 
   noLoop(); // Draw once

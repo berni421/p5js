@@ -36,6 +36,7 @@ function doItems() {
     print("doItems items.names[0]=", items.names[0]);
 
     createCanvas(MAXX, MAXY);
+    resizeCanvas(MAXX, MAXY);
 
     // set first graph
     doGraph("plotItems");

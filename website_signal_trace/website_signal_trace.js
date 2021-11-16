@@ -15,6 +15,7 @@ function preload() {
 
 function setup() {
   createCanvas(MAXX, MAXY);
+  resizeCanvas(MAXX, MAXY);
 }
 
 function draw() {
