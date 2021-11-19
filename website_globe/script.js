@@ -74,14 +74,15 @@ function doGraph(type) {
 
     }
 
-    title();
     let site = items.site;
     let name = items.names[site];
     let data = items.data[site];
     let start = items.start[site];
 
+    title();
     graph = new Display(name, data);
     graph.plot();
+
     print(type + " Done");
 }
 
