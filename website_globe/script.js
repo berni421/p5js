@@ -29,7 +29,7 @@ function setup() {
 function draw() {
     // Animation here in future
 
-    if (touches.length = 1) {
+    if (touches.length === 0) {
         // laptop screen
         camera(
             map(mouseX, 0, 512, 256, -256), map(mouseY, 0, 512, 256, -256), 512,
@@ -41,7 +41,6 @@ function draw() {
             map(touches[0].x, 0, 512, 256, -256), map(touches[0].y, 0, 512, 256, -256), 512,
             0, 0, 0,
             0, 1, 0);
-        print("touches[0]=", touches);
     }
 
     doGraph("plotItems");
