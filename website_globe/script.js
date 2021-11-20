@@ -38,12 +38,16 @@ function touchEnded() {
             map(mouseX, 0, 512, -256, 256), map(mouseY, 0, 512, -256, 256), 512,
             0, 0, 0,
             0, 1, 0);
-    } else {
+    } else if (touches.length === 1) {
         // touch screen
         camera(
             map(touches[0].x, 0, 512, 256, -256), map(touches[0].y, 0, 512, 256, -256), 512,
             0, 0, 0,
             0, 1, 0);
+    } else if (touches.length === 2) {
+        // touch screen and change data
+        items.next();
+        doGraph("plotItems");
     }
     print("touches=", touches);
 
