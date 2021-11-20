@@ -15,7 +15,7 @@ var myFont;
 
 function preload() {
     // handle asynchronous loading of external files using p5.js load tools in a blocking way
-    myFont = loadFont('../fonts/FreeSerif.ttf');
+    myFont = loadFont('../fonts/DejaVuSerif.ttf');
 }
 
 function setup() {
