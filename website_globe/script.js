@@ -202,7 +202,7 @@ class Display {
         this.name = name; // the titile for data
         this.globe = [];
         this.r = 256 - HEADER;
-        this.total = 64;
+        this.total = 32;
         this.prepare(data);
     }
 
