@@ -27,7 +27,13 @@ function setup() {
 }
 
 function draw() {
-    // Animation here in future
+    // touch screen
+    if (touches.length === 1) {
+        camera(
+            map(touches[0].x, 0, 512, 256, -256), map(touches[0].y, 0, 512, 256, -256), 512,
+            0, 0, 0,
+            0, 1, 0);
+    }
 }
 
 function touchEnded() {
@@ -36,12 +42,6 @@ function touchEnded() {
         // laptop screen
         camera(
             map(mouseX, 0, 512, -256, 256), map(mouseY, 0, 512, -256, 256), 512,
-            0, 0, 0,
-            0, 1, 0);
-    } else if (touches.length === 1) {
-        // touch screen
-        camera(
-            map(touches[0].x, 0, 512, 256, -256), map(touches[0].y, 0, 512, 256, -256), 512,
             0, 0, 0,
             0, 1, 0);
     } else {
