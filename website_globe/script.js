@@ -51,11 +51,17 @@ function touchEnded() {
 
 }
 
-function mousePressed() {
-    // Redraw tree
-    items.next();
-    doGraph("plotItems");
+function keyPressed() {
+    // Change data
+    if (key === 'd') {
+        items.next();
+        doGraph("plotItems");
+    }
 }
+
+function mousePressed() {
+}
+
 
 function doItems() {
     print("doItems items.names[0]=", items.names[0]);
