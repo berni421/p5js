@@ -45,18 +45,20 @@ function touchEnded() {
             map(mouseX, 0, 512, -256, 256), map(mouseY, 0, 512, -256, 256), 512,
             0, 0, 0,
             0, 1, 0);
+        doGraph("plotItems");
+
     } else {
         // change data
         items.next();
+        doItems();
     }
-    doGraph("plotItems");
 }
 
 function keyPressed() {
     // Change data
     if (key === 'd') {
         items.next();
-        doItems("plotItems");
+        doItems();
     }
 }
 
