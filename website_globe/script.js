@@ -34,6 +34,7 @@ function draw() {
             0, 0, 0,
             0, 1, 0);
     }
+    doGraph("plotItems");
 }
 
 function touchEnded() {
@@ -45,21 +46,17 @@ function touchEnded() {
             0, 0, 0,
             0, 1, 0);
     } else {
-        // touch screen and change data
+        // change data
         items.next();
-        doGraph("plotItems");
     }
-    print("touches=", touches);
-
     doGraph("plotItems");
-
 }
 
 function keyPressed() {
     // Change data
     if (key === 'd') {
         items.next();
-        doGraph("plotItems");
+        doItems("plotItems");
     }
 }
 
