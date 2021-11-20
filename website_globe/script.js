@@ -28,11 +28,14 @@ function setup() {
 
 function draw() {
     // Animation here in future
+}
+
+function touchEnded() {
 
     if (touches.length === 0) {
         // laptop screen
         camera(
-            map(mouseX, 0, 512, 256, -256), map(mouseY, 0, 512, 256, -256), 512,
+            map(mouseX, 0, 512, -256, 256), map(mouseY, 0, 512, -256, 256), 512,
             0, 0, 0,
             0, 1, 0);
     } else {
@@ -42,8 +45,10 @@ function draw() {
             0, 0, 0,
             0, 1, 0);
     }
+    print("touches=", touches);
 
     doGraph("plotItems");
+
 }
 
 function mousePressed() {
@@ -54,6 +59,11 @@ function mousePressed() {
 
 function doItems() {
     print("doItems items.names[0]=", items.names[0]);
+
+    camera(
+        0, 0, 512,
+        0, 0, 0,
+        0, 1, 0);
 
     // set first graph
     doGraph("plotItems");
