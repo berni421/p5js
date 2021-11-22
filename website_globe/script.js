@@ -57,10 +57,8 @@ function touchEnded() {
 }
 
 function mousePressed() {
-    if (touches.length === 0) {
-        items.next();
-        doItems();
-    }
+    items.next();
+    doItems();
 }
 
 function doItems() {
@@ -91,14 +89,14 @@ function doItems() {
 
     title();
 
-    if (graph === undefined) {
-        graph = new Display(name, data);
-    }
-    doGraph();
+    doGraph(name, data);
 }
 
 
-function doGraph() {
+function doGraph(name, data) {
+    if (graph === undefined) {
+        graph = new Display(name, data);
+    }
     savePoint = graph.point;
     graph.plot();
     graph.point = savePoint;
