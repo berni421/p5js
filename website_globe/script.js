@@ -38,21 +38,19 @@ function draw() {
             camX, camY, MAXZ,
             0, 0, 0,
             0, 1, 0);
-    } else {
-        if (touches.length === 1) {
-            camX = map(touches[0].x, 0, MAXX, -MAXX / 2, MAXX / 2);
-            camY = map(touches[0].y, 0, MAXY, -MAXY / 2, MAXY / 2);
-            camera(
-                camX, camY, MAXZ,
-                0, 0, 0,
-                0, 1, 0);
-        }
     }
     doItems();
 }
 
 function touchEnded() {
-    if (touches.length === 2) {
+    if (touches.length === 1) {
+        camX = map(touches[0].x, 0, MAXX, -MAXX / 2, MAXX / 2);
+        camY = map(touches[0].y, 0, MAXY, -MAXY / 2, MAXY / 2);
+        camera(
+            camX, camY, MAXZ,
+            0, 0, 0,
+            0, 1, 0);
+    } else if (touches.length === 2) {
         items.next();
         doItems();
     }
