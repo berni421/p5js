@@ -42,7 +42,7 @@ function draw() {
     doItems();
 }
 
-function touchEnded() {
+function touchStarted() {
     if (touches.length === 1) {
         camX = map(touches[0].x, 0, MAXX, -MAXX / 2, MAXX / 2);
         camY = map(touches[0].y, 0, MAXY, -MAXY / 2, MAXY / 2);
