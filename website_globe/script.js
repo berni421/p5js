@@ -57,8 +57,10 @@ function touchEnded() {
 }
 
 function mousePressed() {
-    items.next();
-    doItems();
+    if (touches.length === 0) {
+        items.next();
+        doItems();
+    }
 }
 
 function doItems() {
