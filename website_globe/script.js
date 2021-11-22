@@ -4,14 +4,16 @@
 
 const MAXX = 512;
 const MAXY = MAXX;
+const MAXZ = MAXX;
 const POINTSIZE = 4;
 const TEXTSIZE = 16;
 const HEADER = 50;
 const FOOTER = 50;
 
-var items; // data
+var items; // raw data
 var choices; // options
-var myFont;
+var myFont; // for WEBGL text
+var graph = undefined; // current graph data
 
 function preload() {
     // handle asynchronous loading of external files using p5.js load tools in a blocking way
@@ -20,6 +22,7 @@ function preload() {
 
 function setup() {
     createCanvas(MAXX, MAXY, WEBGL);
+    frameRate(1);
     textFont(myFont);
     items = new Data();
     items.loadItems()
@@ -27,60 +30,43 @@ function setup() {
 }
 
 function draw() {
-    // touch screen
-    if (touches.length === 1) {
+    // laptop
+    if (touches.length === 0) {
+        camX = map(mouseX, 0, MAXX, -MAXX / 2, MAXX / 2);
+        camY = map(mouseY, 0, MAXY, -MAXY / 2, MAXY / 2);
         camera(
-            map(touches[0].x, 0, 512, 256, -256), map(touches[0].y, 0, 512, 256, -256), 512,
+            camX, camY, MAXZ,
             0, 0, 0,
             0, 1, 0);
+    } else {
+        if (touches.length === 1) {
+            camX = map(touches[0].x, 0, MAXX, -MAXX / 2, MAXX / 2);
+            camY = map(touches[0].y, 0, MAXY, -MAXY / 2, MAXY / 2);
+            camera(
+                camX, camY, MAXZ,
+                0, 0, 0,
+                0, 1, 0);
+        }
     }
-    doGraph("plotItems");
+    doItems();
 }
 
 function touchEnded() {
-
-    if (touches.length === 0) {
-        // laptop screen
-        camera(
-            map(mouseX, 0, 512, -256, 256), map(mouseY, 0, 512, -256, 256), 512,
-            0, 0, 0,
-            0, 1, 0);
-        doGraph("plotItems");
-
-    } else {
-        // change data
-        items.next();
-        doItems();
-    }
-}
-
-function keyPressed() {
-    // Change data
-    if (key === 'd') {
+    if (touches.length === 2) {
         items.next();
         doItems();
     }
 }
 
 function mousePressed() {
+    items.next();
+    doItems();
 }
-
 
 function doItems() {
     print("doItems items.names[0]=", items.names[0]);
 
-    camera(
-        0, 0, 512,
-        0, 0, 0,
-        0, 1, 0);
-
     // set first graph
-    doGraph("plotItems");
-}
-
-function doGraph(type) {
-    let graph = {};
-
     function title() {
         background("black");
         // Title in Center at Top
@@ -90,19 +76,33 @@ function doGraph(type) {
         let name = items.names[site];
         text(name, -textWidth(name) / 2, -MAXY / 2 + TEXTSIZE);
         print("title=", name);
-
     }
 
     let site = items.site;
     let name = items.names[site];
     let data = items.data[site];
-    let start = items.start[site];
+
+    camX = map(mouseX, 0, MAXX, - MAXX / 2, MAXX / 2);
+    camY = map(mouseY, 0, MAXY, - MAXY / 2, MAXY / 2);
+    camera(
+        camX, camY, MAXZ,
+        0, 0, 0,
+        0, 1, 0);
 
     title();
-    graph = new Display(name, data);
-    graph.plot();
 
-    print(type + " Done");
+    if (graph === undefined) {
+        graph = new Display(name, data);
+    }
+    doGraph();
+}
+
+
+function doGraph() {
+    savePoint = graph.point;
+    graph.plot();
+    graph.point = savePoint;
+    graph.next();
 }
 
 
@@ -110,7 +110,6 @@ class Data {
     constructor() {
         this.names = []; // array of data names
         this.data = [];  // array of site data
-        this.start = [];
         this.sites = 0; // number of sites
         this.site = 0; // current site
     }
@@ -140,7 +139,7 @@ class Data {
         for (let siteDetails of split(siteNames, "\n")) {
             if ("" !== siteDetails) {
                 let site = split(siteDetails, ",");
-                name = site[0];
+                const name = site[0];
                 if ("name" !== name) {
                     // load Site                
                     let fileName = "../data/" + site[1];
@@ -181,7 +180,6 @@ function findStart(d) {
 }
 
 function Ascii(c) {
-    ;
     return (c >= 0 && c <= 255);
 }
 
@@ -287,7 +285,6 @@ class Display {
     }
 
     plot() {
-        noFill();
         noStroke();
         for (let i = 0; i < this.total; i++) {
             beginShape(TRIANGLE_STRIP);
