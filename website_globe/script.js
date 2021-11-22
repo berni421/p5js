@@ -54,6 +54,7 @@ function touchStarted() {
         items.next();
         doItems();
     }
+    return false
 }
 
 function mousePressed() {
