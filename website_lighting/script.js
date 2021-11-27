@@ -15,5 +15,5 @@ function draw() {
     pointLight(255, 255, 255, 0, 0, width);
     noStroke();
     texture(img);
-    ellipsoid(width / 3, width / 6, width / 3);
+    ellipsoid(width / 3, width / 4, width / 3);
 }
