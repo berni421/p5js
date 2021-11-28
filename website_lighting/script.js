@@ -1,6 +1,6 @@
 let img;
 function preload() {
-    img = loadImage('../images/rusty.jpg');
+    img = loadImage('../images/rusty-side.jpg');
 }
 
 function setup() {
