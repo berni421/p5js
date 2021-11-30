@@ -1,42 +1,43 @@
-
 var img;
-var step = 400;
+var imgEnds;
+var planes = 9; // odd number for lighting problem
+var gap;
+
 function preload() {
     img = loadImage('../images/rusty-side.jpg');
+    imgEnds = loadImage('../images/rusty.jpg');
 }
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
-
-    background(0);
     perspective(PI / 2, width / height);
     noStroke();
-    texture(img);
-    translate(-width, 0, 0);
-
-    for (var i = 0; i < width * 2 / step; i++) {
-        push();
-        translate(step * i, 0, -width / 1.1);
-        rotateY(PI / 2);
-        plane(width / 1.1, height / 1.1, 24, 1, false);
-        pop();
-        if (i % 2 == 0) {
-            push();
-            translate(step * i, 0, -2 * width / 1.1);
-            rotateY(PI);
-            plane(step, height / 1.1, 24, 1, false);
-            pop();
-        }
-        //  else {
-        //     translate(0, 0, -step);
-        //     rotateY(PI / 2);
-        //     plane(step, height / 1.1, 24, 1, false);
-        // }
-        pop();
-    }
-
+    gap = windowWidth / planes;
 }
 
 function draw() {
-    rotateY(frameCount * 0.01);
+    background(0);
+    //rotateX(frameCount * -0.01);
+    rotateY(frameCount * -0.01);
+    //rotateZ(frameCount * -0.01);
+    translate(-windowWidth / 2, 0, 0);
+    for (var i = 0; i < planes; i++) {
+        push(); // sides
+        texture(img);
+        translate(gap * i, 0, 0);
+        rotateY(PI / 2);
+        plane(img.width, img.height, 24, 1, false);
+        pop();
+        
+        push(); // ends
+        texture(imgEnds);
+        if (i % 2 == 0) {
+            translate(gap * i + gap/2, 0, -img.width/2);
+        } 
+        else {
+            translate(gap * i + gap/2, 0, img.width/2);
+        }
+        plane(gap, img.height, 24, 1, false);
+        pop();
+    }
 }
