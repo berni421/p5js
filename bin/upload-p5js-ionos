@@ -1,0 +1,2 @@
+set -vx
+rsync -av --exclude .git $HOME/github/p5js/ u38374388@home130205488.1and1-data.host:www.elbourn.com/wp-content/uploads/p5js/
