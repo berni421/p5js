@@ -30,7 +30,7 @@ function setup() {
     MAXZ = MAXX;
     
     createCanvas(MAXX, MAXY, WEBGL);
-    //frameRate(1);
+    frameRate(10);
     
     textFont(myFont);
     items = new Data();
