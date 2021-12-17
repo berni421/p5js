@@ -2,7 +2,7 @@
 var size;
 var objectsPerRow;
 var bluen;
-var undulateZ;
+var undulate;
 var fix;
 var fixinc;
 
@@ -14,7 +14,7 @@ function setup() {
     objectsPerRow = 64;
     size = windowWidth / objectsPerRow;
     bluen = random(1000, 2000);
-    undulateZ = 16;
+    undulate = 16;
     fix = 0;
     fixinc = 0.06;
     frameRate(10);
@@ -52,7 +52,7 @@ function draw() {
             pop();
 
             fix += fixinc;
-            if (fix > undulateZ || fix < -undulateZ) {
+            if (fix > undulate || fix < -undulate) {
                 fixinc = -fixinc;
             }
         }
