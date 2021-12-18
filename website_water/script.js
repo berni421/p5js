@@ -24,10 +24,10 @@ function setup() {
 
 function draw() {
 
-    background(0, 0, 64);
+    skyBlue = color(100, 100, 200);
+    background(skyBlue);
     pointLight(255, 255, 255, 0, -2 * height, 2 * (width + height));
     shininess(1000000);
-    blendMode(ADD);
     noStroke();
 
     // Sun
@@ -46,7 +46,8 @@ function draw() {
             push();
             translate(x, y + fix, 0);
             blue = 255 * noise(bluen);
-            specularMaterial(color(0, 0, blue, 200));
+            sm = color(150, 150, blue, 150);
+            specularMaterial(sm);
             bluen += 0.5;
             plane(size * 1.5);
             pop();
