@@ -6,19 +6,21 @@ function preload() {
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
 
-    for (i = 0; i < 100; i++) {
+    for (i = 0; i < 256; i++) {
         rain[i] = new Drip();
     }
     //print(1, rain[0]);
 
     ambientLight(255); // white light
+    //pointLight(255, 255, 255, 0, 0, width);
 
-    frameRate(10);
+    //frameRate(10);
     //noLoop();
 }
 
 function draw() {
     background(0);
+    rotateX(PI / 2);
 
     //print(2, rain[0]);
     for (i = 0; i < rain.length; i++) {
@@ -26,33 +28,37 @@ function draw() {
         rain[i].update();
         rain[i].display();
     }
+
+
 }
 
 
 class Drip {
     constructor() {
+        this.reset();
+    }
+
+    reset() {
         this.x = random(-width / 2, width / 2);
-        this.y = random(-2 * height, -height);
-        this.z = random(-width, 0);
+        this.y = random(-height / 2, height / 2);
+        this.z = random(-width / 2, width / 2);
         this.diameter = random(8);
     }
 
     update() {
-        if (this.y > 0) {
+        if (this.y < 0) {
             this.y += random(10);
+            this.diameter *= 1.02;
         } else {
-            this.x = random(-width / 2, width / 2);
-            this.y = random(-2 * height, -height);
-            this.z = random(-width, width);
-            this.diameter = random(8);
+            this.reset();
         }
     }
 
     display() {
         push();
         translate(this.x, this.y, this.z);
+        ambientLight(0, 0, 255);
         noStroke();
-        ambientMaterial(0, 0, 255); // blue material
         sphere(this.diameter);
         pop();
     }
