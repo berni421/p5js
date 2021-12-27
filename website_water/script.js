@@ -17,7 +17,7 @@ function setup() {
     undulate = 16;
     fix = 0;
     fixinc = 0.06;
-    frameRate(20);
+    frameRate(10);
 
     //noLoop();
 }

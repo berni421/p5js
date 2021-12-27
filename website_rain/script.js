@@ -7,7 +7,7 @@ function preload() {
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
 
-    for (i = 0; i < 128; i++) {
+    for (i = 0; i < 32; i++) {
         rain[i] = new Drip();
     }
     //print(1, rain[0]);
@@ -15,7 +15,7 @@ function setup() {
     ambientLight(255); // white light
     //pointLight(255, 255, 255, 0, 0, width);
 
-    //frameRate(20);
+    frameRate(10);
     //noLoop();
 }
 
@@ -23,7 +23,7 @@ function draw() {
     background(0);
     //rotateX(PI / 2);
     if (angle < PI / 2) {
-        angle += PI / 2 / 100;
+        angle += PI / 2 / 256;
     }
     rotateX(angle);
 
@@ -64,7 +64,7 @@ class Drip {
         translate(this.x, this.y, this.z);
         ambientLight(0, 0, 255);
         noStroke();
-        sphere(this.diameter);
+        sphere(this.diameter, 12, 12);
         pop();
     }
 }
