@@ -1,4 +1,5 @@
 var rain = [];
+var angle = 0;
 
 function preload() {
 }
@@ -6,7 +7,7 @@ function preload() {
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
 
-    for (i = 0; i < 256; i++) {
+    for (i = 0; i < 128; i++) {
         rain[i] = new Drip();
     }
     //print(1, rain[0]);
@@ -14,13 +15,17 @@ function setup() {
     ambientLight(255); // white light
     //pointLight(255, 255, 255, 0, 0, width);
 
-    //frameRate(10);
+    frameRate(10);
     //noLoop();
 }
 
 function draw() {
     background(0);
-    rotateX(PI / 2);
+    //rotateX(PI / 2);
+    if (angle < PI / 2) {
+        angle += PI / 2 / 100;
+    }
+    rotateX(angle);
 
     //print(2, rain[0]);
     for (i = 0; i < rain.length; i++) {

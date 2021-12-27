@@ -11,13 +11,13 @@ function preload() {
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
-    objectsPerRow = 64;
+    objectsPerRow = 32;
     size = windowWidth / objectsPerRow;
     bluen = random(1000, 2000);
     undulate = 16;
     fix = 0;
     fixinc = 0.06;
-    frameRate(10);
+    //frameRate(10);
 
     //noLoop();
 }
@@ -45,7 +45,7 @@ function draw() {
 
             push();
             translate(x, y + fix, 0);
-            blue = 255 * noise(bluen);
+            blue = map(noise(bluen), 0, 1, 200, 255);
             sm = color(150, 150, blue, 150);
             specularMaterial(sm);
             bluen += 0.5;
