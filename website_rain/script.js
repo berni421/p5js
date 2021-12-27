@@ -15,7 +15,7 @@ function setup() {
     ambientLight(255); // white light
     //pointLight(255, 255, 255, 0, 0, width);
 
-    frameRate(20);
+    //frameRate(20);
     //noLoop();
 }
 
