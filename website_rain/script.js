@@ -15,7 +15,7 @@ function setup() {
     ambientLight(255); // white light
     //pointLight(255, 255, 255, 0, 0, width);
 
-    //frameRate(10);
+    frameRate(10);
     //noLoop();
 }
 
@@ -60,12 +60,15 @@ class Drip {
     }
 
     display() {
-        push();
-        translate(this.x, this.y, this.z);
-        ambientLight(0, 0, 255);
-        noStroke();
+        //push();
+        //translate(this.x, this.y, this.z);
+        //ambientLight(0, 0, 255);
+        //noStroke();
         //sphere(this.diameter, 12, 12); too slow
-        plane(this.diameter, 2 * this.diameter);
-        pop();
+        //plane(this.diameter, 2 * this.diameter);
+        stroke(0, 0, 255);
+        strokeWeight(4 * this.diameter);
+        point(this.x, this.y, this.z);
+        //pop();
     }
 }
