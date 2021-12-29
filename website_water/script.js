@@ -11,13 +11,14 @@ function preload() {
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
+    //createCanvas(512, 512, WEBGL);
     objectsPerRow = 32;
     size = windowWidth / objectsPerRow;
     bluen = random(1000, 2000);
     undulate = 16;
     fix = 0;
-    fixinc = 0.06;
-    frameRate(5);
+    fixinc = 0.2;
+    frameRate(1);
 
     //noLoop();
 }
