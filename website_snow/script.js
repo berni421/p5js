@@ -50,19 +50,24 @@ class Flake {
         this.velocity = createVector(random(-0.01, 0.01), random(1), random(0.01));
         this.acceleration = createVector(random(-0.01, 0.01), random(1), random(-0.1, 0.1));
         this.size = 4;
+        this.landed = false;
     }
 
     update() {
-        this.position.add(this.velocity);
-        this.velocity.add(this.acceleration);
-        if (this.position.y < -height / 2 || this.position.y >= height / 2 - this.size) {
-            this.position.y = height / 2 - this.size;
-            this.velocity.x = 0;
-            this.velocity.y = 0;
-            this.velocity.z = 0;
-            this.acceleration.x = 0;
-            this.acceleration.y = 0;
-            this.acceleration.z = 0;
+        if (!this.landed) {
+            this.position.add(this.velocity);
+            this.velocity.add(this.acceleration);
+            if (this.position.y < -height / 2 || this.position.y >= height / 2 - this.size) {
+                this.position.y = height / 2 - this.size;
+                this.velocity.x = 0;
+                this.velocity.y = 0;
+                this.velocity.z = 0;
+                this.acceleration.x = 0;
+                this.acceleration.y = 0;
+                this.acceleration.z = 0;
+                this.landed = true;
+                this.size = this.size * 2;
+            }
         }
     }
 
