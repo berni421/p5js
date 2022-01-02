@@ -1,5 +1,6 @@
 var flakes = [];
 var spin = 0.0;
+var fRate = 10;
 
 function preload() {
 }
@@ -7,29 +8,26 @@ function preload() {
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     ambientLight('white'); // white light
-    //camera(0, height, width, 0, 0, 0, 0, 1, 0);
+    frameRate(fRate);
 }
 
 function draw() {
     background(0);
 
-    // Rotate after some time
-    if (frameCount > 50 * 5) {
-        rotateY(spin);
-        spin += 0.01;
-    }
+    rotateY(spin);
+    spin += 0.01;
 
     push(0);
     noStroke();
-    fill(0, 0, 50);
+    fill(0, 100, 0);
     translate(0, height / 2, 0);
     rotateX(PI / 2);
     plane(width * 4);
     pop();
 
     // add flakes until some time
-    if (frameCount < 50 * 10) {
-        for (i = 0; i < 5; i++) {
+    if (frameCount < fRate * 10) {
+        for (i = 0; i < 10; i++) {
             flakes.push(new Flake());
             flakes.push(new Flake());
         }
@@ -44,11 +42,6 @@ function draw() {
             flakes.splice(i, 1);
         }
     }
-
-    // stop animation after a time
-    // if (frameCount > 50 * 20) {
-    //     noLoop();
-    // }
 }
 
 class Flake {
@@ -56,13 +49,14 @@ class Flake {
         this.position = createVector(random(-width / 2, width / 2), -height / 2, random(-width / 2, width / 2));
         this.velocity = createVector(random(-0.01, 0.01), random(1), random(0.01));
         this.acceleration = createVector(random(-0.01, 0.01), random(1), random(-0.1, 0.1));
-        this.size = 2;
+        this.size = 4;
     }
 
     update() {
         this.position.add(this.velocity);
         this.velocity.add(this.acceleration);
-        if (this.position.y < -height / 2 || this.position.y > height / 2 - 2 * this.size) {
+        if (this.position.y < -height / 2 || this.position.y >= height / 2 - this.size) {
+            this.position.y = height / 2 - this.size;
             this.velocity.x = 0;
             this.velocity.y = 0;
             this.velocity.z = 0;
@@ -82,7 +76,7 @@ class Flake {
 
     display() {
         stroke('white');
-        strokeWeight(4 * this.size);
+        strokeWeight(this.size);
         point(this.position);
     }
 }
