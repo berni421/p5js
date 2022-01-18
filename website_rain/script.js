@@ -21,10 +21,10 @@ function setup() {
 
 function draw() {
     background(0);
-    //rotateX(PI / 2);
-    if (angle < PI / 2) {
-        angle += PI / 2 / 256;
-    }
+    rotateX(PI / 2);
+    // if (angle < PI / 2) {
+    //     angle += PI / 2 / 256;
+    // }
     rotateX(angle);
 
     //print(2, rain[0]);
