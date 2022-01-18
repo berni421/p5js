@@ -10,7 +10,7 @@ function setup() {
     frameRate(1);
     textFont(myFont);
     textAlign(CENTER, CENTER);
-    textSize(height / 4);
+    textSize(height / 5);
     fill('white')
 }
 
