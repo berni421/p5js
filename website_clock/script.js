@@ -11,7 +11,7 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     frameRate(1);
     textAlign(CENTER, CENTER);
-    fill('white')
+    fill('white');
 
     dayName[0] = "Sunday";
     dayName[1] = "Monday";
@@ -50,7 +50,14 @@ function draw() {
     const year = dateTime.getFullYear();
     const day = dateTime.getDate();
 
-    const hour = dateTime.getHours();
+
+    var hour = dateTime.getHours();
+    const hours = hour;
+    var dayAMPM = "AM";
+    if (hour > 12) {
+        dayAMPM = "PM";
+        hour = hour - 12;
+    }
     const minute = dateTime.getMinutes();
     const second = dateTime.getSeconds();
 
@@ -60,14 +67,14 @@ function draw() {
     var dayPad = "";
     var monthPad = "";
 
-    if (hour < 10) { hourPad = "0"; }
+    //    if (hour < 10) { hourPad = "0"; }
     if (minute < 10) { minutePad = "0"; }
     if (second < 10) { secondPad = "0"; }
     if (day < 10) { dayPad = "0"; }
 
     var time = hourPad + hour + ":" +
         minutePad + minute + ":" +
-        secondPad + second;
+        secondPad + second + " " + dayAMPM;
     var date = dayPad + day + " " +
         monthPad + dayMonth[month] + " " +
         year;
@@ -75,6 +82,6 @@ function draw() {
     textSize(width * 0.1);
     text(time, width / 2, height * 0.25);
     textSize(width * 0.075);
-    text(dayName[dayOfWeek] + " " + dayPeriod[hour], width / 2, height * 0.5);
+    text(dayName[dayOfWeek] + " " + dayPeriod[hours], width / 2, height * 0.5);
     text(date, width / 2, height * 0.75);
 }
