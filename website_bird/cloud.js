@@ -29,7 +29,7 @@ class Clouds {
 class Cloud {
   constructor() {
     this.x = width;
-    this.y = noise(frameCount * .02) * height / 4 + height / 8;
+    this.y = noise(frameCount * .02) * height / 4;
   }
 
   update() {
