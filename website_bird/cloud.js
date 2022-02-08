@@ -42,15 +42,15 @@ class Cloud {
     var x = this.x;
     var y = this.y;
     // bottom
-    for (var blob = 0; blob <= 200; blob += 50) {
+    for (var blob = 0; blob <= 100; blob += 50) {
       circle(x + blob, y, 75);
     }
     // middle
-    for (var blob = 0; blob <= 100; blob += 25) {
+    for (var blob = 0; blob <= 50; blob += 25) {
       circle(x + blob + 50, y - 50, 50);
     }
     // top
-    for (var blob = 0; blob <= 50; blob += 12.5) {
+    for (var blob = 0; blob <= 25; blob += 12.5) {
       circle(x + blob + 75, y - 75, 12.5);
     }
   }

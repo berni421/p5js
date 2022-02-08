@@ -20,10 +20,10 @@ function draw() {
   sky.update();
   bird.display();
   bird.update();
+}
 
-  if (touches.length > 0) {
-    bird.up;
-  }
+function touchStarted() {
+  bird.up();
 }
 
 function keyPressed() {
