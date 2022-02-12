@@ -1,6 +1,7 @@
 var ground;
 var sky;
 var bird;
+var score;
 
 function preload() {}
 
@@ -9,6 +10,7 @@ function setup() {
   ground = new Ground();
   sky = new Clouds()
   bird = new Bird();
+  score = new Score();
   frameRate(10);
 }
 
@@ -20,6 +22,9 @@ function draw() {
   sky.update();
   bird.display();
   bird.update();
+  score.display();
+  score.update();
+  score.intersect();
 }
 
 function touchStarted() {

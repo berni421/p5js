@@ -24,7 +24,7 @@ class Ground {
 
 class Slab {
   constructor() {
-    this.depth = noise(frameCount * .01) * height / 4;
+    this.depth = noise(frameCount * .01) * height / 4 + height / 8;
     this.width = 10;
     this.x = width;
     this.y = height - this.depth;

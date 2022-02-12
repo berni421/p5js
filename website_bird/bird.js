@@ -2,9 +2,11 @@ class Bird {
   constructor() {
     this.x = width / 4;
     this.y = height / 2;
-    this.lift = -12;
+    this.lift = -6;
     this.gravity = 0.25;
     this.velocity = 0;
+    this.colour = "blue";
+    this.colourSaved = this.colour;
   }
 
   update() {
@@ -30,7 +32,7 @@ class Bird {
     var x = this.x;
     var y = this.y;
 
-    fill("blue");
+    fill(this.colour);
     noStroke();
     circle(x, y, 30)
     triangle(
