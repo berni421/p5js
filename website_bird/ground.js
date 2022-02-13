@@ -1,6 +1,12 @@
 class Ground {
   constructor() {
     this.slabs = [];
+    this.tick = 0;
+    this.update()
+    while (this.slabs[0].x > 0) {
+      this.update();
+    }
+
   }
 
   display() {
@@ -18,13 +24,15 @@ class Ground {
     for (var i = 0; i < this.slabs.length; i++) {
       this.slabs[i].update();
     }
-    this.slabs.push(new Slab());
+    this.slabs.push(new Slab(this.tick));
+    this.tick += 0.02;
+
   }
 }
 
 class Slab {
-  constructor() {
-    this.depth = noise(frameCount * .01) * height / 4 + height / 8;
+  constructor(tick) {
+    this.depth = noise(tick) * height / 4 + height / 16;
     this.width = 10;
     this.x = width;
     this.y = height - this.depth;

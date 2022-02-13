@@ -32,6 +32,7 @@ class Bird {
     var x = this.x;
     var y = this.y;
 
+    //print(this.velocity);
     fill(this.colour);
     noStroke();
     circle(x, y, 30)

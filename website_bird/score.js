@@ -7,9 +7,10 @@ class Score {
     this.score++;
   }
 
-  intersect() {
+  intersectGround() {
     var x = bird.x;
     var y = bird.y;
+    var hit = false;
     bird.colour = bird.colourSaved;
     for (var i = 0; i < ground.slabs.length; i++) {
       var minX = ground.slabs[i].x;
@@ -20,10 +21,21 @@ class Score {
           this.score -= 10;
           bird.colourSaved = bird.colour;
           bird.colour = "red";
+          bird.velocity = -bird.gravity;
+          bird.y = groundY;
+          hit = true;
           break;
         }
       }
     }
+    return hit;
+  }
+
+  intersectCloud() {
+    var x = bird.x;
+    var y = bird.y;
+    var hit = false;
+    bird.colour = bird.colourSaved;
     for (var i = 0; i < sky.clouds.length; i++) {
       var minX = sky.clouds[i].x - 25;
       var maxX = sky.clouds[i].x + 125;
@@ -33,10 +45,12 @@ class Score {
           this.score -= 10;
           bird.colourSaved = bird.colour;
           bird.colour = "red";
+          hit = true;
           break;
         }
       }
     }
+    return hit;
   }
 
   display() {

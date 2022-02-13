@@ -24,7 +24,7 @@ function draw() {
   bird.update();
   score.display();
   score.update();
-  score.intersect();
+  score.intersectCloud() || score.intersectGround();
 }
 
 function touchStarted() {
