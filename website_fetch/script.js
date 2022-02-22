@@ -5,22 +5,22 @@ async function catchImg() {
   print(response);
   const blob = await response.blob();
   print(blob);
-  const imgB = await createImageBitmap(blob);
-  print(imgB);
-  const img = createImage(width, height);
-  img.pixels = imgB;
-  img.updatePixels();
-  image(imgB, 0, 0);
+  const o = URL.createObjectURL(blob);
+  print(o);
+  const i = createImg(o);
+  print(i);
+  i.position(50, 50);
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight, WEBGL);
+  background("black");
   catchImg()
     .then(response => {
       print("OK");
     })
     .catch(error => {
-      print(error);
+      print("Error:", error);
     });
 }
 
