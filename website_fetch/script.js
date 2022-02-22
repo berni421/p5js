@@ -5,12 +5,16 @@ async function catchImg() {
   print(response);
   const blob = await response.blob();
   print(blob);
-  const img = await blob.text();
-  image(img, 0, 0);
+  const imgB = await createImageBitmap(blob);
+  print(imgB);
+  const img = createImage(width, height);
+  img.pixels = imgB;
+  img.updatePixels();
+  image(imgB, 0, 0);
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight, WEBGL);
+  createCanvas(windowWidth, windowHeight);
   catchImg()
     .then(response => {
       print("OK");
