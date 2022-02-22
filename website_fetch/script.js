@@ -7,7 +7,7 @@ async function catchImg() {
   print(blob);
   const o = URL.createObjectURL(blob);
   print(o);
-  const i = createImg(o);
+  const i = createImg(o, "an image of rusty");
   print(i);
   i.position(50, 50);
 }
