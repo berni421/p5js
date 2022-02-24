@@ -1,21 +1,21 @@
 function preload() {}
 
-async function catchImg() {
+async function setTexture() {
   const response = await fetch('../images/rusty.jpg');
   print(response);
   const blob = await response.blob();
   print(blob);
   const o = URL.createObjectURL(blob);
   print(o);
-  const i = createImg(o, "an image of rusty");
+  const i = await createImg(o, "rusty");
+  i.hide();
   print(i);
-  i.position(50, 50);
+  texture(i);
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
-  background("black");
-  catchImg()
+  setTexture()
     .then(response => {
       print("OK");
     })
@@ -24,4 +24,11 @@ function setup() {
     });
 }
 
-function draw() {}
+function draw() {
+  background("black");
+  rotateX(frameCount * 0.01);
+  rotateY(frameCount * 0.01);
+  rotateZ(frameCount * 0.01);
+  noStroke();
+  box(400);
+}
