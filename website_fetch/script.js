@@ -1,4 +1,6 @@
 var img;
+var speed = 0.001;
+
 function preload() {
   img = loadImage('../images/rusty.jpg');
 }
@@ -30,9 +32,9 @@ function setup() {
 
 function draw() {
   background("black");
-  rotateX(frameCount * 0.01);
-  rotateY(frameCount * 0.01);
-  rotateZ(frameCount * 0.01);
+  rotateX(frameCount * speed);
+  rotateY(frameCount * speed);
+  rotateZ(frameCount * speed);
   noStroke();
-  box(400);
+  box(600);
 }
