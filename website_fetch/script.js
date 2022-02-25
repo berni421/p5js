@@ -36,5 +36,5 @@ function draw() {
   rotateY(frameCount * speed);
   rotateZ(frameCount * speed);
   noStroke();
-  box(600);
+  box(height * 3);
 }
