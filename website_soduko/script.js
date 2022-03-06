@@ -25,8 +25,8 @@ class Grid() {
   }
 
   add() {
-    index = nextAvailable();
-    value = makeChoice();
+    index = this.nextAvailable();
+    value = this.makeChoice();
     if (this.isValid(value, index) {
         this.grid[index.row][index.column] = value;
       }
