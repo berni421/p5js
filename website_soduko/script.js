@@ -28,15 +28,16 @@ class Grid() {
     index = this.nextAvailable();
     value = this.makeChoice();
     if (this.isValid(value, index) {
-        this.grid[index.row][index.column] = value;
-      }
+      this.grid[index.row][index.column] = value;
+    }
     }
 
     nextAvailable() {
       for (var row = 0; row < 9; row++) {
         for (var column = 0; column < 9; column++) {
           if (this.grid == null) {
-            return [row: row, column: column];
+            return [row: row,
+              column: column];
           }
         }
       }
@@ -47,7 +48,7 @@ class Grid() {
     }
 
     isValid(value, index) {
-      # would not be 3 x 3 tiles
+      # value not in 3 x 3 tiles
       tileRow = 3 * index.row % 3;
       tileColumn = 3 index.column % 3;
       for (var row = tileRow * 3; row < tileRow * 3 + 3; row++) {
@@ -60,7 +61,7 @@ class Grid() {
       return true;
     }
 
-    # would duplicate in any 9 x 9 row or columns
+    # value in any 9 x 9 row or columns
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
         if (this.grid[row][column] == value) {
