@@ -15,6 +15,7 @@ class Grid {
     if (index == null) {
       return;
     }
+    exit(a);
     const value = this.makeChoice();
     if (this.isValid(value, index)) {
       this.grid[index.row][index.column] = value;
