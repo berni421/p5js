@@ -50,8 +50,11 @@ class Grid {
         }
       }
     }
+<<<<<<< HEAD
     print(row, column);
     exit(a);
+=======
+>>>>>>> 0a96c013f9c4d14d07859dc488eb7c41b78d391e
     // value in any 9 x 9 row or columns
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
