@@ -52,7 +52,6 @@ class Grid {
         }
       }
     }
-    return true;
     // value in any 9 x 9 row or columns
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
