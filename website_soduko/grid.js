@@ -11,11 +11,9 @@ class Grid {
 
   add() {
     const index = this.nextAvailable();
-    print(index);
     if (index == null) {
       return;
     }
-    exit(a);
     const value = this.makeChoice();
     if (this.isValid(value, index)) {
       this.grid[index.row][index.column] = value;
@@ -52,7 +50,8 @@ class Grid {
         }
       }
     }
-    return true;
+    print(row, column);
+    exit(a);
     // value in any 9 x 9 row or columns
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
