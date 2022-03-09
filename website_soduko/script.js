@@ -1,12 +1,16 @@
+var g; // the Grid
+
 function preload() {}
 
-var g;
-
 function setup() {
-  createCanvas(windowWidth, windowHeight, WEBGL);
+  createCanvas(windowWidth, windowHeight);
+  background("black");
+  fill("white");
   g = new Grid();
-  g.add();
-  print(g);
+  g.solve();
+  print(g.grid);
+  print(g.avail);
+  g.display();
 }
 
 function draw() {

@@ -1,28 +1,60 @@
 class Grid {
   constructor() {
     this.grid = [];
+    this.avail = [];
     for (var row = 0; row < 9; row++) {
       this.grid[row] = [];
       for (var column = 0; column < 9; column++) {
         this.grid[row][column] = null;
+        this.avail.push(column + 1);
       }
     }
+    this.avail.push(null);
   }
 
-  add() {
-    const index = this.nextAvailable();
+  solve() {
+    var a = 0;
+    while (a < 100 && this.add(0)) {
+      a++;
+    };
+    print("attempts:", a)
+  }
+
+  makeChoice() {
+    return this.avail[0];
+  }
+
+  choiceUsed() {
+    const value = this.avail.shift();
+  }
+
+  add(offset) {
+    const index = this.nextAvailable(offset);
     if (index == null) {
-      return;
+      return false;
     }
+    const {
+      row,
+      column
+    } = index;
     const value = this.makeChoice();
+    if (value == null) {
+      return false;
+    }
     if (this.isValid(value, index)) {
-      this.grid[index.row][index.column] = value;
+      this.grid[row][column] = value;
+      this.choiceUsed();
+      return true;
+    } else {
+      return this.add(offset + 1);
     }
   }
 
-  nextAvailable() {
-    for (var row = 0; row < 9; row++) {
-      for (var column = 0; column < 9; column++) {
+  nextAvailable(offset) {
+    const offsetRow = floor(offset / 9);
+    const offsetColumn = offset % 9;
+    for (var row = offsetRow; row < 9; row++) {
+      for (var column = offsetColumn; column < 9; column++) {
         if (this.grid[row][column] == null) {
           const index = {
             row: row,
@@ -35,34 +67,50 @@ class Grid {
     return null;
   }
 
-  makeChoice() {
-    return floor(map(random(), 0, 1, 1, 9));
-  }
-
   isValid(value, index) {
-    // value not in 3 x 3 tiles
-    const tileRow = 3 * index.row % 3;
-    const tileColumn = 3 * index.column % 3;
-    for (var row = tileRow * 3; row < tileRow * 3 + 3; row++) {
-      for (var column = tileColumn * 3; tileColumn * 3 + 3; column++) {
+    //print("isValid: ", index.row, index.column, value);
+    const tileRow = 3 * floor(index.row / 3);
+    const tileColumn = 3 * floor(index.column / 3);
+    for (var row = tileRow; row < tileRow + 3; row++) {
+      for (var column = tileColumn; column < tileColumn + 3; column++) {
         if (this.grid[row][column] == value) {
+          //print("tile check FAILED");
           return false;
         }
       }
     }
-<<<<<<< HEAD
-    print(row, column);
-    exit(a);
-=======
->>>>>>> 0a96c013f9c4d14d07859dc488eb7c41b78d391e
-    // value in any 9 x 9 row or columns
+    // value not in row
+    var row = index.row;
+    for (var column = 0; column < 9; column++) {
+      if (this.grid[row][column] == value) {
+        return false;
+      }
+    }
+    // value not in column
+    var column = index.column;
     for (var row = 0; row < 9; row++) {
-      for (var column = 0; column < 9; column++) {
-        if (this.grid[row][column] == value) {
-          return false;
-        }
+      if (this.grid[row][column] == value) {
+        return false;
       }
     }
     return true;
+  }
+
+  display() {
+    const s = 24;
+    var t, v;
+    textSize(s);
+    for (var row = 0; row < 9; row++) {
+      for (var column = 0; column < 9; column++) {
+        v = this.grid[row][column];
+        if (v == null) {
+          t = "0";
+        } else {
+          t = v;
+        }
+        text(t, 100 + s * column, 100 + s * row);
+      }
+
+    }
   }
 }
