@@ -6,30 +6,29 @@ class Grid {
       this.grid[row] = [];
       for (var column = 0; column < 9; column++) {
         this.grid[row][column] = null;
-        this.avail.push(column + 1);
       }
     }
-    this.avail.push(null);
+    for (var n = 0; n < 9; n++) {
+      this.avail.push(n + 1);
+    }
   }
 
   solve() {
     var a = 0;
-    while (a < 100 && this.add(0)) {
+    while (a < 128 && this.add()) {
       a++;
     };
-    print("attempts:", a)
+    print("attempts:", a);
   }
 
   makeChoice() {
-    return this.avail[0];
+    const c = this.avail.shift();
+    this.avail.push(c);
+    return c;
   }
 
-  choiceUsed() {
-    const value = this.avail.shift();
-  }
-
-  add(offset) {
-    const index = this.nextAvailable(offset);
+  add() {
+    const index = this.nextAvailable();
     if (index == null) {
       return false;
     }
@@ -38,23 +37,16 @@ class Grid {
       column
     } = index;
     const value = this.makeChoice();
-    if (value == null) {
-      return false;
-    }
     if (this.isValid(value, index)) {
       this.grid[row][column] = value;
-      this.choiceUsed();
       return true;
-    } else {
-      return this.add(offset + 1);
     }
+    return this.add();
   }
 
-  nextAvailable(offset) {
-    const offsetRow = floor(offset / 9);
-    const offsetColumn = offset % 9;
-    for (var row = offsetRow; row < 9; row++) {
-      for (var column = offsetColumn; column < 9; column++) {
+  nextAvailable() {
+    for (var row = 0; row < 9; row++) {
+      for (var column = 0; column < 9; column++) {
         if (this.grid[row][column] == null) {
           const index = {
             row: row,
@@ -96,7 +88,7 @@ class Grid {
     return true;
   }
 
-  display() {
+  display(offset) {
     const s = 24;
     var t, v;
     textSize(s);
@@ -108,9 +100,8 @@ class Grid {
         } else {
           t = v;
         }
-        text(t, 100 + s * column, 100 + s * row);
+        text(t, offset * s + s * column, 100 + s * row);
       }
-
     }
   }
 }

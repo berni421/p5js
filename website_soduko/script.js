@@ -7,10 +7,17 @@ function setup() {
   background("black");
   fill("white");
   g = new Grid();
+
+  // set some values
+  g.grid[0][0] = 9;
+
+  g.display(1);
+
   g.solve();
+
   print(g.grid);
-  print(g.avail);
-  g.display();
+
+  g.display(11);
 }
 
 function draw() {
