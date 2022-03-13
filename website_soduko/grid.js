@@ -68,18 +68,19 @@ class Grid {
 
   solveButton() {
     this.prepGrid();
+    var backtracks = 0;
     var finished = false;
     while (!finished) {
       const sg = this.cloneGrid(this.grid);
       const sa = this.cloneAvail(this.avail);
-      if (this.solve(128)) {
+      if (this.solve(8 * 8 * 10)) {
         finished = true;
       } else {
         //backtrack
-        this.displayResultCells();
+        this.logResultCells(++backtracks);
         this.grid = this.cloneGrid(sg);
         this.avail = this.cloneAvail(sa);
-        //const skipped = this.makeChoice();
+        const skipped = this.makeChoice();
       }
     }
     background("black");
@@ -90,6 +91,7 @@ class Grid {
     } else {
       this.displayFailed();
     }
+    print("Done");
   }
 
   solve(n) {
@@ -116,7 +118,7 @@ class Grid {
       return this.solve(n - 1);
     } else {
       // backtrack
-      print("backtrack");
+      //print("backtrack");
       return false;
     }
   }
@@ -229,6 +231,23 @@ class Grid {
         button.size(s, s);
         button.show();
       }
+    }
+  }
+
+  logResultCells(backtracks) {
+    var rowText;
+    var value;
+    print("Backtracks: " + backtracks);
+    for (var row = 0; row < 9; row++) {
+      rowText = row + ": ";
+      for (var column = 0; column < 9; column++) {
+        value = this.grid[row][column].value;
+        if (value == null) {
+          value = " "
+        }
+        rowText = rowText + value;
+      }
+      print(rowText);
     }
   }
 
