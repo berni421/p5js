@@ -101,7 +101,7 @@ class Grid {
     var value;
     for (var i = 0; i < 9; i++) {
       value = this.makeChoice();
-      if (this.isValid(value, index)) {
+      if (this.isValid(this.grid, value, index)) {
         this.grid[index.row][index.column].value = value;
         choiceMade = true;
         break;
@@ -127,10 +127,7 @@ class Grid {
       for (var column = 0; column < 9; column++) {
         const value = this.grid[row][column].value;
         if (value == null) {
-          const index = {
-            row: row,
-            column: column
-          };
+          const index = { row: row, column: column };
           return index;
         }
       }
@@ -139,23 +136,23 @@ class Grid {
     return null;
   }
 
-  isValid(value, index) {
+  isValid(grid, value, index) {
     const tileRow = 3 * floor(index.row / 3);
     const tileColumn = 3 * floor(index.column / 3);
     for (var row = tileRow; row < tileRow + 3; row++) {
       for (var column = tileColumn; column < tileColumn + 3; column++) {
-        if (this.grid[row][column].value == value) {
+        if (grid[row][column].value == value) {
           return false;
         }
       }
     }
     for (var column = 0; column < 9; column++) {
-      if (this.grid[index.row][column].value == value) {
+      if (grid[index.row][column].value == value) {
         return false;
       }
     }
     for (var row = 0; row < 9; row++) {
-      if (this.grid[row][index.column].value == value) {
+      if (grid[row][index.column].value == value) {
         return false;
       }
     }
@@ -163,10 +160,7 @@ class Grid {
   }
 
   updateCell(cell) {
-    var {
-      row,
-      column
-    } = cell;
+    var { row, column } = cell;
     var value = this.cells[row][column].value;
     if (value == null) {
       value = 1
@@ -174,6 +168,15 @@ class Grid {
       value = null;
     } else {
       value++;
+    }
+    const index = { row: row, column: column };
+    while (!this.isValid(this.cells, value, index)) {
+      //advance to next value
+      if (value == 9) {
+        value = null;
+      } else {
+        value++;
+      }
     }
     this.cells[row][column].value = value;
     const button = this.cells[row][column].button;
@@ -195,7 +198,6 @@ class Grid {
         button.position(column * s, 2 * s + row * s);
         button.size(s, s);
         const cellInfo = {
-          me: this,
           row: row,
           column: column
         };
