@@ -24,12 +24,13 @@ class Grid {
     for (let n = 0; n < 9; n++) {
       this.avail.push(n + 1);
     }
-    const s = 24;
-    this.div = createDiv('progress')
-    this.div.size("1000", "10");
-    this.div.position(s * 0, s * 12.2);
-    this.div.html('<progress id="file"></progress>');
-    this.div.hide();
+    this.textSize = 24;
+    const progress = createDiv('progress')
+    progress.size("1000", "10");
+    progress.position(this.textSize * 0, this.textSize * 12.2);
+    progress.html('<progress id="file"></progress>');
+    progress.hide();
+    this.progress = progress;
   }
 
   prepGrid() {
@@ -81,6 +82,7 @@ class Grid {
       }
     }
     background("black");
+    me.progress.hide();
     me.solveButton.show();
     me.displayInitCells();
     if (finished) {
@@ -88,16 +90,22 @@ class Grid {
     } else {
       me.displayFailed();
     }
-    me.div.hide();
     print("Solved");
   }
 
   solveButtonPressed() {
+    background("black");
     this.solveButton.hide();
+    this.progress.show();
+    //hide result buttons
+    for (let row = 0; row < 9; row++) {
+      for (let column = 0; column < 9; column++) {
+        this.grid[row][column].button.hide();
+      }
+    }
+    this.displayInitCells();
     this.prepGrid();
-    this.div.show();
     setTimeout(this.doSolve, 1000, this);
-    print("Done");
   }
 
   solve(n) {
@@ -205,7 +213,7 @@ class Grid {
   }
 
   displayInitCells() {
-    const s = 24;
+    const s = this.textSize;
     textSize(s);
     text("Initial Grid", s * 0, s * 1);
     for (let row = 0; row < 9; row++) {
@@ -229,7 +237,7 @@ class Grid {
   }
 
   displayResultCells() {
-    const s = 24;
+    const s = this.textSize;
     textSize(s);
     text("Solved Grid", s * 0, s * 15);
     for (let row = 0; row < 9; row++) {
@@ -261,7 +269,7 @@ class Grid {
   }
 
   displayFailed() {
-    const s = 24;
+    const s = this.textSize;
     textSize(s * 2);
     text("Unsolved!", s * 0, s * 15);
     //hide result buttons
@@ -270,12 +278,10 @@ class Grid {
         this.grid[row][column].button.hide();
       }
     }
-    //this.displayResultCells();
   }
 
-
   displaySolveButton() {
-    const s = 24;
+    const s = this.textSize;
     textSize(s * 2);
     const button = createButton();
     button.html("SOLVE ME");
