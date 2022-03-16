@@ -3,10 +3,10 @@ class Grid {
     this.grid = [];
     this.avail = [];
     this.cells = [];
-    for (var row = 0; row < 9; row++) {
+    for (let row = 0; row < 9; row++) {
       this.grid[row] = [];
       this.cells[row] = [];
-      for (var column = 0; column < 9; column++) {
+      for (let column = 0; column < 9; column++) {
         const button = createButton(" ");
         button.hide();
         this.grid[row][column] = {
@@ -21,14 +21,20 @@ class Grid {
         };
       }
     }
-    for (var n = 0; n < 9; n++) {
+    for (let n = 0; n < 9; n++) {
       this.avail.push(n + 1);
     }
+    const s = 24;
+    this.div = createDiv('progress')
+    this.div.size("1000", "10");
+    this.div.position(s * 0, s * 12.2);
+    this.div.html('<progress id="file"></progress>');
+    this.div.hide();
   }
 
   prepGrid() {
-    for (var row = 0; row < 9; row++) {
-      for (var column = 0; column < 9; column++) {
+    for (let row = 0; row < 9; row++) {
+      for (let column = 0; column < 9; column++) {
         this.grid[row][column].value = this.cells[row][column].value;
       }
     }
@@ -37,9 +43,9 @@ class Grid {
 
   cloneGrid(g) {
     const n = [];
-    for (var row = 0; row < 9; row++) {
+    for (let row = 0; row < 9; row++) {
       n[row] = [];
-      for (var column = 0; column < 9; column++) {
+      for (let column = 0; column < 9; column++) {
         n[row][column] = {
           button: g[row][column].button,
           value: g[row][column].value
@@ -51,39 +57,46 @@ class Grid {
 
   cloneAvail(a) {
     const n = [];
-    for (var i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
       n[i] = a[i];
     }
     return n;
   }
 
-  solveButtonPressed() {
-    const button = this.solveButton;
-    button.hide();
-    this.prepGrid();
-    var backtracks = 0;
-    var finished = false;
+  doSolve(me) {
+    let backtracks = 0;
+    let finished = false;
     while (!finished) {
-      const sg = this.cloneGrid(this.grid);
-      const sa = this.cloneAvail(this.avail);
-      if (this.solve(8 * 8 * 10)) {
+      const sg = me.cloneGrid(me.grid);
+      const sa = me.cloneAvail(me.avail);
+      if (me.solve(8 * 8 * 10)) {
         finished = true;
       } else {
         //backtrack
-        this.logResultCells(++backtracks);
-        this.grid = this.cloneGrid(sg);
-        this.avail = this.cloneAvail(sa);
-        const skipped = this.makeChoice();
+        print("backtrack:", backtracks++);
+        me.logResultCells();
+        me.grid = me.cloneGrid(sg);
+        me.avail = me.cloneAvail(sa);
+        const skipped = me.makeChoice();
       }
     }
     background("black");
-    button.show();
-    this.displayInitCells();
+    me.solveButton.show();
+    me.displayInitCells();
     if (finished) {
-      this.displayResultCells();
+      me.displayResultCells();
     } else {
-      this.displayFailed();
+      me.displayFailed();
     }
+    me.div.hide();
+    print("Solved");
+  }
+
+  solveButtonPressed() {
+    this.solveButton.hide();
+    this.prepGrid();
+    this.div.show();
+    setTimeout(this.doSolve, 1000, this);
     print("Done");
   }
 
@@ -97,9 +110,9 @@ class Grid {
       //finished
       return true;
     }
-    var choiceMade = false;
-    var value;
-    for (var i = 0; i < 9; i++) {
+    let choiceMade = false;
+    let value;
+    for (let i = 0; i < 9; i++) {
       value = this.makeChoice();
       if (this.isValid(this.grid, value, index)) {
         this.grid[index.row][index.column].value = value;
@@ -123,11 +136,14 @@ class Grid {
   }
 
   nextAvailable() {
-    for (var row = 0; row < 9; row++) {
-      for (var column = 0; column < 9; column++) {
+    for (let row = 0; row < 9; row++) {
+      for (let column = 0; column < 9; column++) {
         const value = this.grid[row][column].value;
         if (value == null) {
-          const index = { row: row, column: column };
+          const index = {
+            row: row,
+            column: column
+          };
           return index;
         }
       }
@@ -139,19 +155,19 @@ class Grid {
   isValid(grid, value, index) {
     const tileRow = 3 * floor(index.row / 3);
     const tileColumn = 3 * floor(index.column / 3);
-    for (var row = tileRow; row < tileRow + 3; row++) {
-      for (var column = tileColumn; column < tileColumn + 3; column++) {
+    for (let row = tileRow; row < tileRow + 3; row++) {
+      for (let column = tileColumn; column < tileColumn + 3; column++) {
         if (grid[row][column].value == value) {
           return false;
         }
       }
     }
-    for (var column = 0; column < 9; column++) {
+    for (let column = 0; column < 9; column++) {
       if (grid[index.row][column].value == value) {
         return false;
       }
     }
-    for (var row = 0; row < 9; row++) {
+    for (let row = 0; row < 9; row++) {
       if (grid[row][index.column].value == value) {
         return false;
       }
@@ -160,8 +176,11 @@ class Grid {
   }
 
   updateCell(cell) {
-    var { row, column } = cell;
-    var value = this.cells[row][column].value;
+    let {
+      row,
+      column
+    } = cell;
+    let value = this.cells[row][column].value;
     if (value == null) {
       value = 1
     } else if (value == 9) {
@@ -169,7 +188,10 @@ class Grid {
     } else {
       value++;
     }
-    const index = { row: row, column: column };
+    const index = {
+      row: row,
+      column: column
+    };
     while (!this.isValid(this.cells, value, index)) {
       //advance to next value
       if (value == 9) {
@@ -179,17 +201,16 @@ class Grid {
       }
     }
     this.cells[row][column].value = value;
-    const button = this.cells[row][column].button;
-    button.html(value);
+    this.cells[row][column].button.html(value);
   }
 
   displayInitCells() {
     const s = 24;
     textSize(s);
     text("Initial Grid", s * 0, s * 1);
-    for (var row = 0; row < 9; row++) {
-      for (var column = 0; column < 9; column++) {
-        var valueText = this.cells[row][column].value;
+    for (let row = 0; row < 9; row++) {
+      for (let column = 0; column < 9; column++) {
+        let valueText = this.cells[row][column].value;
         if (valueText == null) {
           valueText = " ";
         }
@@ -211,8 +232,8 @@ class Grid {
     const s = 24;
     textSize(s);
     text("Solved Grid", s * 0, s * 15);
-    for (var row = 0; row < 9; row++) {
-      for (var column = 0; column < 9; column++) {
+    for (let row = 0; row < 9; row++) {
+      for (let column = 0; column < 9; column++) {
         const value = this.grid[row][column].value;
         const button = this.grid[row][column].button;
         button.html(value);
@@ -223,13 +244,12 @@ class Grid {
     }
   }
 
-  logResultCells(backtracks) {
-    var rowText;
-    var value;
-    print("Backtracks: " + backtracks);
-    for (var row = 0; row < 9; row++) {
+  logResultCells() {
+    let rowText;
+    let value;
+    for (let row = 0; row < 9; row++) {
       rowText = row + ": ";
-      for (var column = 0; column < 9; column++) {
+      for (let column = 0; column < 9; column++) {
         value = this.grid[row][column].value;
         if (value == null) {
           value = " "
@@ -245,10 +265,9 @@ class Grid {
     textSize(s * 2);
     text("Unsolved!", s * 0, s * 15);
     //hide result buttons
-    for (var row = 0; row < 9; row++) {
-      for (var column = 0; column < 9; column++) {
-        const button = this.grid[row][column].button;
-        button.hide();
+    for (let row = 0; row < 9; row++) {
+      for (let column = 0; column < 9; column++) {
+        this.grid[row][column].button.hide();
       }
     }
     //this.displayResultCells();
