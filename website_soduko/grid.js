@@ -64,7 +64,12 @@ class Grid {
     return n;
   }
 
-  doSolve(me) {
+  async doSolve(me) {
+    async function wait(ms) {
+      return new Promise(resolve => {
+        setTimeout(resolve, ms);
+      });
+    }
     let backtracks = 0;
     let finished = false;
     while (!finished) {
@@ -79,6 +84,8 @@ class Grid {
         me.grid = me.cloneGrid(sg);
         me.avail = me.cloneAvail(sa);
         const skipped = me.makeChoice();
+        print("pause for screen update");
+        await wait(500);
       }
     }
     background("black");
@@ -105,7 +112,7 @@ class Grid {
     }
     this.displayInitCells();
     this.prepGrid();
-    setTimeout(this.doSolve, 1000, this);
+    this.doSolve(this);
   }
 
   solve(n) {
