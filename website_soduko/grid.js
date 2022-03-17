@@ -64,6 +64,25 @@ class Grid {
     return n;
   }
 
+  gridToString(grid) {
+    let str = "";
+    for (let row = 0; row < 9; row++) {
+      for (let column = 0; column < 9; column++) {
+        str = str + grid[row][column].value;
+      }
+    }
+    return str;
+  }
+
+  findString(str, history) {
+    for (let i = 0; i < history.length; i++) {
+      if (str == history[i]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   async doSolve(me) {
     async function wait(ms) {
       return new Promise(resolve => {
@@ -79,11 +98,20 @@ class Grid {
         finished = true;
       } else {
         //backtrack
-        print("backtrack:", backtracks++);
+        print("backtrack:", ++backtracks);
+        // check not in history and save
+        const h = me.gridToString(me.grid);
+        if (me.findString(h, me.history)) {
+          break;
+        }
+        me.history.push(h);
+        // console log progress
         me.logResultCells();
+        // revert data
         me.grid = me.cloneGrid(sg);
         me.avail = me.cloneAvail(sa);
         const skipped = me.makeChoice();
+        // time for screen updates
         print("pause for screen update");
         await wait(500);
       }
@@ -94,10 +122,12 @@ class Grid {
     me.displayInitCells();
     if (finished) {
       me.displayResultCells();
+      print("Solved");
     } else {
       me.displayFailed();
+      print("Unsolved");
     }
-    print("Solved");
+
   }
 
   solveButtonPressed() {
@@ -112,6 +142,7 @@ class Grid {
     }
     this.displayInitCells();
     this.prepGrid();
+    this.history = [];
     this.doSolve(this);
   }
 
