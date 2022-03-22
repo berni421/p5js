@@ -91,13 +91,14 @@ class oxo {
         return false;
     }
 
-    choose() {
-        // Priority is middle
-        if (" " == this.state[1][1].value) {
-            this.state[1][1].value = "X";
-            return true;
-        }
+    start() {
+        // Choose a random start position
+        let row = floor(random(2.99));
+        let column = floor(random(2.99));
+        this.state[row][column].value = "X";
+    }
 
+    choose() {
         // find an "X", make a line of two
         for (let row = 0; row < 3; row++) {
             for (let column = 0; column < 3; column++) {
@@ -107,8 +108,11 @@ class oxo {
                     let choice = this.adjacent(row, column);
                     if (false != choice) {
                         let { row: rowAdjacent, column: columnAdjacent } = choice;
-                        this.state[rowAdjacent][columnAdjacent].value = "X";
-                        return true;
+                        let value = this.state[rowAdjacent][columnAdjacent].value;
+                        if (" " == value) {
+                            this.state[rowAdjacent][columnAdjacent].value = "X";
+                            return true;
+                        }
                     }
                 }
             }
@@ -124,22 +128,30 @@ class oxo {
                         let { row: choiceRow, column: choiceColumn, direction: choiceDirection } = choice;
                         if (!false == choice) {
                             let choice = this.lineComplete(choiceRow, choiceColumn, choiceDirection);
-                            this.state[choiceRow][choiceColumn].value = "X";
-                            return true;
+                            let value = this.state[choiceRow][choiceColumn].value;
+                            if (" " == value) {
+                                this.state[choiceRow][choiceColumn].value = "X";
+                                this.displayWin();
+                                return true;
+                            }
                         }
                     }
                 }
             }
         }
 
-
         print("choose failed");
         return false;
     }
 
+    displayWin() {
+        background("black");
+        this.displayGrid();
+        this.displayState();
+        text("Winner", 0, 0);
+    }
 
     displayState() {
-        this.displayGrid();
         for (let row = 0; row < 3; row++) {
             for (let column = 0; column < 3; column++) {
                 let mark = this.state[row][column].value;
@@ -149,6 +161,7 @@ class oxo {
     }
 
     displayGrid() {
+        background("black");
         // horizontal lines
         let heightSize = height / 3;
         for (let row = -0.5; row <= 0.5; row++) {
