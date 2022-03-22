@@ -18,7 +18,6 @@ class oxo {
     }
 
     set(mX, mY) {
-        print(mX, mY);
         for (let row = 0; row < 3; row++) {
             for (let column = 0; column < 3; column++) {
                 let node = this.state[row][column];
@@ -31,9 +30,112 @@ class oxo {
         }
     }
 
+    adjacent(row, column) {
+        for (let tryRow = row - 1; tryRow <= row + 1; tryRow++) {
+            for (let tryColumn = column - 1; tryColumn < column + 1; tryColumn++) {
+                let checkRow = (tryRow >= 0 && tryRow < 3);
+                let checkColumn = (tryColumn >= 0 && tryColumn < 3);
+                if (checkRow && checkColumn) {
+                    let value = this.state[tryRow][tryColumn].value;
+                    if (" " == value) {
+                        return { row: tryRow, column: tryColumn };
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    lineChoice(row, column) {
+        for (let tryRow = row - 1; tryRow <= row + 1; tryRow++) {
+            for (let tryColumn = column - 1; tryColumn < column + 1; tryColumn++) {
+                let checkRow = (tryRow >= 0 && tryRow < 3);
+                let checkColumn = (tryColumn >= 0 && tryColumn < 3);
+                if (checkRow && checkColumn) {
+                    let value = this.state[tryRow][tryColumn].value;
+                    if ("X" == value) {
+                        if (tryRow == row && tryColumn > 0 && tryColumn == column - 1) {
+                            return { row: 0, column: -1 }; // left
+                        } else if (tryRow == row && tryColumn < 2 && tryColumn == column + 1) {
+                            return { row: 0, column: 1 };  // right
+                        } else if (tryColumn == column && tryRow < 2 && tryRow == row - 1) {
+                            return { row: -1, column: 0 }; // up
+                        } else if (tryColumn == column && tryRow < 2 && tryRow == row + 1) {
+                            return { row: 1, column: 0 };  // down
+                        } else if (tryRow > 0 && tryRow == row - 1 && tryColumn > 0 && tryColumn == column - 1) {
+                            return { row: 1, column: 1 };  // left up
+                        } else if (tryRow > 0 && tryRow == row + 1 && tryColumn > 0 && tryColumn == column + 1) {
+                            return { row: -1, column: -1 };  // left down
+                        } else if (tryRow > 0 && tryRow == row - 1 && tryColumn < 2 && tryColumn == column + 1) {
+                            return { row: 1, column: 1 };  // right up
+                        } else if (tryRow > 0 && tryRow == row - 1 && tryColumn > 0 && tryColumn == column - 1) {
+                            return { row: -1, column: -1 };  // right down
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    lineComplete(row, column, direction) {
+        // check direction applied to row, column is valid
+        let { dX, dY } = direction;
+        nextRow = row + dX;
+        nextColum = row + dY;
+        checkRow = (nextRow >= 0 && nextRow < 3);
+        checkColumn = (nextColumn >= 0 && nextColumn < 3);
+        if (checkRow && checkColumn) {
+            return { row: checkRow, column: checkColumn };
+        }
+        return false;
+    }
+
     choose() {
-        this.state[1][1].value = "X";
-    };
+        // Priority is middle
+        if (" " == this.state[1][1].value) {
+            this.state[1][1].value = "X";
+            return true;
+        }
+
+        // find an "X", make a line of two
+        for (let row = 0; row < 3; row++) {
+            for (let column = 0; column < 3; column++) {
+                let value = this.state[row][column].value;
+                if ("X" == value) {
+                    // chose an adjacent empty node
+                    let choice = this.adjacent(row, column);
+                    if (false != choice) {
+                        let { row: rowAdjacent, column: columnAdjacent } = choice;
+                        this.state[rowAdjacent][columnAdjacent].value = "X";
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // find a line of two "X" make three
+        for (let row = 0; row < 3; row++) {
+            for (let column = 0; column < 3; column++) {
+                let value = this.state[row][column].value;
+                if ("X" == value) {
+                    let choice = this.lineChoice(row, column);
+                    if (false != choice) {
+                        let { row: choiceRow, column: choiceColumn, direction: choiceDirection } = choice;
+                        if (!false == choice) {
+                            let choice = this.lineComplete(choiceRow, choiceColumn, choiceDirection);
+                            this.state[choiceRow][choiceColumn].value = "X";
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        print("choose failed");
+        return false;
+    }
 
 
     displayState() {

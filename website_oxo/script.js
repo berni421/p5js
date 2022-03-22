@@ -8,7 +8,7 @@ function setup() {
     background("black");
     game = new oxo();
     game.displayGrid();
-    game.choose(); // testing
+    game.choose(); // computer goes fiest
     game.displayState();
 }
 
