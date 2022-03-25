@@ -6,25 +6,32 @@ class oxo {
             for (let column = 0; column < 3; column++) {
                 let node = {};
                 node.value = " ";
-                let heightSize = height / 7;
-                let widthSize = width / 7;
-                node.upperLeftX = 2.3 * widthSize * (row - 1) - widthSize / 2 + width / 2;
-                node.upperLeftY = 2.4 * heightSize * (column - 1) - heightSize / 2 + height / 2;
-                node.widthSize = widthSize;
-                node.heightSize = heightSize;
-                this.state[row].push(node);
+                let heightSize = height / 3;
+                let widthSize = width / 3;
+                node.upperLeftX = (column - 1) * widthSize - widthSize / 2 + width / 60;
+                node.upperLeftY = (row - 1) * heightSize - heightSize / 2 + height / 60;
+                node.widthSize = widthSize - width / 30;
+                node.heightSize = heightSize - height / 30;
+                this.state[row][column] = node;
             }
         }
+        this.gridEmpty = true;
     }
 
-    set(mX, mY) {
+    userChoice(mX, mY) {
+        print(mX, mY);
         for (let row = 0; row < 3; row++) {
             for (let column = 0; column < 3; column++) {
                 let node = this.state[row][column];
                 let checkX = (mX > node.upperLeftX && mX < node.upperLeftX + node.widthSize);
                 let checkY = (mY > node.upperLeftY && mY < node.upperLeftY + node.heightSize);
                 if (checkX && checkY) {
-                    node.value = "O";
+                    if (" " == node.value) {
+                        node.value = "O";
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             }
         }
@@ -46,7 +53,7 @@ class oxo {
         return false;
     }
 
-    lineChoice(row, column) {
+    lineDirection(row, column) {
         for (let tryRow = row - 1; tryRow <= row + 1; tryRow++) {
             for (let tryColumn = column - 1; tryColumn < column + 1; tryColumn++) {
                 let checkRow = (tryRow >= 0 && tryRow < 3);
@@ -78,27 +85,117 @@ class oxo {
         return false;
     }
 
-    lineComplete(row, column, direction) {
-        // check direction applied to row, column is valid
-        let { dX, dY } = direction;
-        nextRow = row + dX;
-        nextColum = row + dY;
-        checkRow = (nextRow >= 0 && nextRow < 3);
-        checkColumn = (nextColumn >= 0 && nextColumn < 3);
-        if (checkRow && checkColumn) {
-            return { row: checkRow, column: checkColumn };
+    checkNext(row, column) {
+        // check row, column is valid
+        const checkRow = (row >= 0 && row < 3);
+        const checkColumn = (column >= 0 && column < 3);
+        return (checkRow && checkColumn)
+    }
+
+    checkWin() {
+        // check horizontal rows
+        const pieces = ["X", "O"];
+        for (let i = 0; i < pieces.length; i++) {
+            let choice = pieces[i];
+            for (let row = 0; row < 3; row++) {
+                let value = this.state[row][0].value;
+                if (choice == value) {
+                    let count = 1;
+                    for (let column = 1; column < 3; column++) {
+                        let valueColumn = this.state[row][column].value;
+                        if (choice == valueColumn) {
+                            count++;
+                        }
+                    }
+                    if (3 == count) {
+                        print(choice, " wins");
+                        return pieces[i];
+                    }
+                }
+            }
         }
+
+        // check vertical lines
+        for (let i = 0; i < pieces.length; i++) {
+            let choice = pieces[i];
+            for (let column = 0; column < 3; column++) {
+                let value = this.state[0][column].value;
+                if (choice == value) {
+                    let count = 1;
+                    for (let row = 1; row < 3; row++) {
+                        let valueRow = this.state[row][column].value;
+                        if (choice == valueRow) {
+                            count++;
+                        }
+                    }
+                    if (3 == count) {
+                        print(choice, " wins");
+                        return pieces[i];
+                    }
+                }
+            }
+        }
+
+        // check diagonal lines
+        for (let i = 0; i < pieces.length; i++) {
+            let choices = pieces[i] +
+                pieces[i] +
+                pieces[i];
+            let values = this.state[0][0].value +
+                this.state[1][1].value +
+                this.state[2][2].value
+            if (choices == values) {
+                print(choices, " wins");
+                return pieces[i];
+            }
+        }
+
+        for (let i = 0; i < pieces.length; i++) {
+            let choice = pieces[i];
+            let value = this.state[2][0].value;
+            if (choice == value) {
+                let count = 1;
+                for (let rowColumn = 1; rowColumn < 3; rowColumn++) {
+                    let valueRowColumn = this.state[rowColumn][rowColumn].value;
+                    if (choice == valueRowColumn) {
+                        count++;
+                    }
+                    if (3 == count) {
+                        print(choice, " wins");
+                        return pieces[i];
+                    }
+                }
+            }
+        }
+
         return false;
     }
 
-    start() {
-        // Choose a random start position
-        let row = floor(random(2.99));
-        let column = floor(random(2.99));
-        this.state[row][column].value = "X";
-    }
-
     choose() {
+        // find a line of two "X" make three
+        for (let row = 0; row < 3; row++) {
+            for (let column = 0; column < 3; column++) {
+                let value = this.state[row][column].value;
+                if ("X" == value) {
+                    // now find direction of an adjacent "X"
+                    let direction = this.lineDirection(row, column);
+                    if (false != direction) {
+                        // now find final "X" in that direction
+                        let { row: directionRow, column: directionColumn } = direction;
+                        let completeRow = row + 2 * directionRow;
+                        let completeColumn = column + 2 * directionColumn;
+                        // check final row, column valid, assign final "X"
+                        if (this.checkNext(completeRow, completeColumn)) {
+                            let valueNext = this.state[completeRow][completeColumn].value;
+                            if (" " == valueNext) {
+                                this.state[completeRow][completeColumn].value = "X";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         // find an "X", make a line of two
         for (let row = 0; row < 3; row++) {
             for (let column = 0; column < 3; column++) {
@@ -118,50 +215,54 @@ class oxo {
             }
         }
 
-        // find a line of two "X" make three
-        for (let row = 0; row < 3; row++) {
-            for (let column = 0; column < 3; column++) {
-                let value = this.state[row][column].value;
-                if ("X" == value) {
-                    let choice = this.lineChoice(row, column);
-                    if (false != choice) {
-                        let { row: choiceRow, column: choiceColumn, direction: choiceDirection } = choice;
-                        if (!false == choice) {
-                            let choice = this.lineComplete(choiceRow, choiceColumn, choiceDirection);
-                            let value = this.state[choiceRow][choiceColumn].value;
-                            if (" " == value) {
-                                this.state[choiceRow][choiceColumn].value = "X";
-                                this.displayWin();
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
+        // Choose a random start position
+        if (this.gridEmpty) {
+            this.gridEmpty = false;
+            let row = floor(random(2.99));
+            let column = floor(random(2.99));
+            this.state[row][column].value = "X";
+            return true;
         }
 
-        print("choose failed");
+        print("Choose failed");
         return false;
     }
 
-    displayWin() {
+    displayWin(winner) {
         background("black");
         this.displayGrid();
         this.displayState();
-        text("Winner", 0, 0);
+        textSize(32);
+        textAlign(CENTER, CENTER);
+        fill("yellow");
+        let y = this.state[1][1].heightSize / 4;
+        text(winner + " is the winner", 0, -y);
+    }
+
+    displayDraw() {
+        background("black");
+        this.displayGrid();
+        this.displayState();
+        textSize(32);
+        textAlign(CENTER, CENTER);
+        fill("red");
+        let y = this.state[1][1].heightSize / 4;
+        text("draw", 0, -y);
     }
 
     displayState() {
+        background("black");
+        this.displayGrid();
         for (let row = 0; row < 3; row++) {
             for (let column = 0; column < 3; column++) {
                 let mark = this.state[row][column].value;
                 this.displayMark(mark, row, column);
             }
         }
+        //this.dumpState();
     }
 
     displayGrid() {
-        background("black");
         // horizontal lines
         let heightSize = height / 3;
         for (let row = -0.5; row <= 0.5; row++) {
@@ -182,18 +283,19 @@ class oxo {
         }
     }
 
-    displayMark(type, x, y) {
-        let heightSize = height / 7;
-        let widthSize = width / 7;
-        let xPosition = 2.3 * widthSize * (x - 1);
-        let yPosttion = 2.4 * heightSize * (y - 1);
+    displayMark(type, row, column) {
+        let node = this.state[row][column];
+        let xPosition = node.upperLeftX;
+        let yPosttion = node.upperLeftY;
+        let heightSize = node.heightSize;
+        let widthSize = node.widthSize;
         push();
         translate(xPosition, yPosttion, 0);
         stroke("white");
         strokeWeight(8);
-        let point1 = { x: -widthSize, y: -heightSize, z: 0 };
-        let point2 = { x: widthSize, y: -heightSize, z: 0 };
-        let point3 = { x: -widthSize, y: heightSize, z: 0 };
+        let point1 = { x: 0, y: 0, z: 0 };
+        let point2 = { x: widthSize, y: 0, z: 0 };
+        let point3 = { x: 0, y: heightSize, z: 0 };
         let point4 = { x: widthSize, y: heightSize, z: 0 };
         if (type == "X") {
             line(point1.x, point1.y, point1.z, point4.x, point4.y, point4.z);
@@ -206,5 +308,20 @@ class oxo {
             line(point3.x, point3.y, point3.z, point1.x, point1.y, point1.z);
         }
         pop();
+    }
+
+    dumpState() {
+        for (let row = 0; row < 3; row++) {
+            for (let column = 0; column < 3; column++) {
+                let node = this.state[row][column];
+                push();
+                translate(node.upperLeftX, node.upperLeftY, 0);
+                strokeWeight(16);
+                stroke("red");
+                point(0, 0, 0);
+                text(row + "," + column + ":" + floor(node.upperLeftX) + "," + floor(node.upperLeftY), 0, 0, 0)
+                pop();
+            }
+        }
     }
 }
