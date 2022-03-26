@@ -16,18 +16,21 @@ function setup() {
 function mouseClicked(event) {
     const valid = game.userChoice(mouseX - width / 2, mouseY - height / 2);
     if (valid) {
-        winner = game.checkWin();
+        let winner = game.checkWin();
         if (!winner) {
-            if (game.choose()) {
-                game.displayState();
-            } else {
-                game.displayDraw();
-                stop();
-            }
-        } else {
-            game.displayWin(winner);
-            stop();
+            let choice = game.choose();
         }
+    }
+    winner = game.checkWin();
+    if (!winner) {
+        game.displayState();
+    } else {
+        game.displayWin(winner);
+        stop();
+    }
+    if (game.checkDraw()) {
+        game.displayDraw();
+        stop();
     }
 }
 

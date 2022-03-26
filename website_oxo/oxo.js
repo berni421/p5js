@@ -39,7 +39,7 @@ class oxo {
 
     adjacent(row, column) {
         for (let tryRow = row - 1; tryRow <= row + 1; tryRow++) {
-            for (let tryColumn = column - 1; tryColumn < column + 1; tryColumn++) {
+            for (let tryColumn = column - 1; tryColumn <= column + 1; tryColumn++) {
                 let checkRow = (tryRow >= 0 && tryRow < 3);
                 let checkColumn = (tryColumn >= 0 && tryColumn < 3);
                 if (checkRow && checkColumn) {
@@ -93,54 +93,13 @@ class oxo {
     }
 
     checkWin() {
-        // check horizontal rows
+        // check for lines
         const pieces = ["X", "O"];
-        for (let i = 0; i < pieces.length; i++) {
-            let choice = pieces[i];
-            for (let row = 0; row < 3; row++) {
-                let value = this.state[row][0].value;
-                if (choice == value) {
-                    let count = 1;
-                    for (let column = 1; column < 3; column++) {
-                        let valueColumn = this.state[row][column].value;
-                        if (choice == valueColumn) {
-                            count++;
-                        }
-                    }
-                    if (3 == count) {
-                        print(choice, " wins");
-                        return pieces[i];
-                    }
-                }
-            }
-        }
-
-        // check vertical lines
-        for (let i = 0; i < pieces.length; i++) {
-            let choice = pieces[i];
-            for (let column = 0; column < 3; column++) {
-                let value = this.state[0][column].value;
-                if (choice == value) {
-                    let count = 1;
-                    for (let row = 1; row < 3; row++) {
-                        let valueRow = this.state[row][column].value;
-                        if (choice == valueRow) {
-                            count++;
-                        }
-                    }
-                    if (3 == count) {
-                        print(choice, " wins");
-                        return pieces[i];
-                    }
-                }
-            }
-        }
-
-        // check diagonal lines
         for (let i = 0; i < pieces.length; i++) {
             let choices = pieces[i] +
                 pieces[i] +
                 pieces[i];
+            // check diaganol from top left to bottom right
             let values = this.state[0][0].value +
                 this.state[1][1].value +
                 this.state[2][2].value
@@ -148,27 +107,51 @@ class oxo {
                 print(choices, " wins");
                 return pieces[i];
             }
-        }
-
-        for (let i = 0; i < pieces.length; i++) {
-            let choice = pieces[i];
-            let value = this.state[2][0].value;
-            if (choice == value) {
-                let count = 1;
-                for (let rowColumn = 1; rowColumn < 3; rowColumn++) {
-                    let valueRowColumn = this.state[rowColumn][rowColumn].value;
-                    if (choice == valueRowColumn) {
-                        count++;
-                    }
-                    if (3 == count) {
-                        print(choice, " wins");
-                        return pieces[i];
-                    }
+            // check diagonol from top right to bottom left
+            values = this.state[2][0].value +
+                this.state[1][1].value +
+                this.state[0][2].value
+            if (choices == values) {
+                print(choices, " wins");
+                return pieces[i];
+            }
+            // check rows
+            for (let row = 0; row < 3; row++) {
+                values = "";
+                for (let column = 0; column < 3; column++) {
+                    values = values + this.state[row][column].value;
+                }
+                if (choices == values) {
+                    print(choices, " wins");
+                    return pieces[i];
+                }
+            }
+            // check columns
+            for (let column = 0; column < 3; column++) {
+                values = "";
+                for (let row = 0; row < 3; row++) {
+                    values = values + this.state[row][column].value;
+                }
+                print(values);
+                if (choices == values) {
+                    print(pieces[i], " wins");
+                    return pieces[i];
                 }
             }
         }
-
         return false;
+    }
+
+    checkDraw() {
+        for (let row = 0; row < 3; row++) {
+            for (let column = 0; column < 3; column++) {
+                let value = this.state[row][column].value;
+                if (" " == value) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     choose() {
@@ -189,6 +172,7 @@ class oxo {
                             let valueNext = this.state[completeRow][completeColumn].value;
                             if (" " == valueNext) {
                                 this.state[completeRow][completeColumn].value = "X";
+                                return true;
                             }
                         }
                     }
