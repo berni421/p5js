@@ -1,30 +1,12 @@
-// http://localhost/github/p5js/website_water/
-var size;
-var objectsPerRow;
-var bluen;
-var undulate;
-var fix;
-var fixinc;
-
 function preload() {
 }
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
-    //createCanvas(512, 512, WEBGL);
-    objectsPerRow = 32;
-    size = windowWidth / objectsPerRow;
-    bluen = random(1000, 2000);
-    undulate = 16;
-    fix = 0;
-    fixinc = 0.2;
-    frameRate(1);
-
-    //noLoop();
 }
 
+let wave = 0;
 function draw() {
-
     skyBlue = color(100, 100, 200);
     background(skyBlue);
     pointLight(255, 255, 255, 0, -2 * height, 2 * (width + height));
@@ -40,23 +22,21 @@ function draw() {
     pop();
 
     // land
-    rotateX(PI / 4);
-    for (var x = -width * 1.25; x <= width * 1.25; x = x + size) {
-        for (var y = -height / 2; y <= height / 2; y = y + size) {
-
-            push();
-            translate(x, y + fix, 0);
-            blue = map(noise(bluen), 0, 1, 200, 255);
-            sm = color(150, 150, blue, 150);
-            specularMaterial(sm);
-            bluen += 0.5;
-            plane(size * 1.5);
-            pop();
-
-            fix += fixinc;
-            if (fix > undulate || fix < -undulate) {
-                fixinc = -fixinc;
-            }
+    pointLight(255, 204, 0, 0, -height / 2, 0);
+    noStroke();
+    let waveinc = 0.05;
+    for (let x = -width; x < width; x++) {
+        push();
+        let y = sin(wave);
+        translate(x, y * 20, 0);
+        rotateX(PI / 3);
+        if (y < -0.99) {
+            specularMaterial(color("white"));
+        } else {
+            specularMaterial(color("blue"));
         }
+        plane(4, 2 * height);
+        pop();
+        wave += waveinc;
     }
 }
