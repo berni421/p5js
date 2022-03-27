@@ -1,4 +1,4 @@
-class oxo {
+class Oxo {
     constructor() {
         this.state = [];
         for (let row = 0; row < 3; row++) {

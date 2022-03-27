@@ -8,7 +8,7 @@ function preload() {
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     textFont(myFont);
-    game = new oxo();
+    game = new Oxo();
     game.choose(); // computer goes fiest
     game.displayState();
 }
