@@ -1,1 +1,2 @@
-https://addons.mozilla.org/en-US/firefox/addon/wave-accessibility-tool/
+https://addons.mozilla.org/en-US/firefox/addon/wave-accessibility-tool/ - not maintained use ff own in developer tools
+
