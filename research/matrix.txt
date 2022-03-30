@@ -10,3 +10,39 @@ https://editor.p5js.org/Gil/sketches/UsW9zPgNL
 https://github.com/emilyxxie/green_rain/blob/master/sketch.js
 
 https://github.com/abishekvashok/cmatrix
+
+
+https://scifi.stackexchange.com/questions/137575/is-there-a-list-of-the-symbols-shown-in-the-matrixthe-symbols-rain-how-many
+
+
+These are mostly known characters, but they are flipped (mirrored). They include Arabic digits, Latin letters, punctuation/math/etc characters, Kanji and halfwidth Katakana. Here you are, a list (I believe it's 100% full) from analyzing the code rain in opening scene (0:30-0:37) and dream scene:
+
+ARABIC DIGITS
+
+    mirrored: 2, 5, 9, 8 (two identical circles – hard to tell if mirrored)
+    not mirrored: 1, 7 (without the line crossing through the middle), 0 (a "slashed zero" form), 3 (a "flat-topped three" form, upside down), 4 (a "closed top four" form, with underscore, but see )
+    *) there is no 6 
+
+LATIN LETTERS (NOT MIRRORED)
+
+    Z (sans-serif)
+    *) +(letters AEHIMRTX at the end of intro forming "THE MATRIX", but it's clearly visible that they were added to the video after generating the code rain because they misalign, glow brighter, are thinner and have serif font-face) 
+
+PUNCTUATION/MATH/ETC. (symmetrical, so no sense saying if mirrored)
+
+    :."=*+-¦|_
+    [space] (I assume so; sometimes there is an empty place in a column and one could treat that as blank place, not [space] generated; but sometimes it really appears in a sequence in spots where the symbols change frequently)
+    ╌ (← "double dash horizontal" but low, on the bottom line, like underscore; I haven't found such glyph in Unicode table and online)
+    *) there's no dot in the middle of the text line (・/∙/•/etc.) (as Annan stated) – it's rather normal full stop [.], because it's on the bottom 
+
+(MOST OF) HALF-WIDTH KATAKANA (MIRRORED) (in order of appearance in Unicode table)
+
+    ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ
+    missing ones: ｲｸﾁﾄﾉﾌﾍﾖﾙﾚﾛﾝ
+    *) Annan said that character [ﾍ] is present in code – I believe he was wrong; I think he must've seen a fragment of another character during appearing (they appear not each at once but each unhiding from top to bottom)
+    **) what's interesting – [ｳｵｹ] are with overscore, [ﾈﾎﾔ] are with underscore; I think this is somewhat because of emulating technical problems of old screens; just like the underscore in digit [4] 
+
+KANJI
+
+    日 
+
