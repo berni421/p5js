@@ -1,46 +1,25 @@
-let myFont;
-
+const fontSize = 64;
+const dY = fontSize * .75;
+let fontIpag;
+let fontDejaVuSerif;
+let cloud;
+//
 function preload() {
-  // myFont = loadFont("../fonts/DejaVuSerif.ttf");
-  myFont = loadFont("../fonts/ipag0208_for_legacy_compatibility.ttf");
+  fontIpag = loadFont("../fonts/ipag0208_for_legacy_compatibility.ttf");
+  fontDejaVuSerif = loadFont("../fonts/DejaVuSerif.ttf");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
-  textFont(myFont);
   background("black");
-  //display codes
-  let s = 24;
-  textSize(s);
-  fill("green");
-  let x = -width / 2;
-  let y = -height / 2;
-  for (let c = 0xFF60; c < 0xFF9F; c++) {
-    text(c + ":" + String.fromCharCode(c), x, y);
-    y += s;
-    if (y > 0) {
-      y = -height / 2;
-      x = x + 5 * 24;
-    }
-  }
-  // display character set spacing
-  s = 96;
-  let xs = 0.4;
-  let ys = 0.8;
-  x = -width / 2;
-  y = 100;
-  textSize(s);
-  for (let c = 0xFF66; c < 0xFF9E; c++) {
-    text(String.fromCharCode(c), x, y);
-    x += s * xs;
-    if (x > width / 2 - s * xs) {
-      y += s * ys;
-      x = -width / 2;
-    }
-  }
-  print("end");
+  cloud = new RainCloud();
+  pointLight("white", 0, height, 0);
+  frameRate(2);
 }
 
 function draw() {
-  noLoop();
+  background("black");
+  cloud.display();
+  cloud.update();
+  camera(mouseX - width / 2, mouseY - height / 2, 0, 0, 0, 0, 0, 1, 0)
 }
