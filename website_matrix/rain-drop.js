@@ -3,21 +3,27 @@ class RainDrop {
     this.x = x;
     this.y = y;
     this.z = z;
-    this.c = floor(random(0xFF60, 0xFF9F));
+    if (random() < 0.5) {
+      this.font = fontIpag;
+      this.c = floor(random(0xFF60, 0xFF9F));
+    } else {
+      this.font = fontDejaVuSerif
+      this.c = floor(random(33, 64));
+    }
   }
   reset() {
     this.y = -height / 2;
   }
   display() {
     textSize(fontSize);
-    textFont(fontIpag);
+    textFont(this.font);
     push();
     const y = this.y;
     specularMaterial("green");
     if (y > -height / 2 * 0.33) {
       specularMaterial("lime");
     }
-    if (y > height / 2 - dY) {
+    if (y > height / 2 * 0.66) {
       specularMaterial("white");
     }
     translate(this.x, this.y, this.z);
