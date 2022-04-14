@@ -4,9 +4,10 @@ let x, y; // the current position of the turtle
 let currentangle = 0; // which way the turtle is pointing
 let step = 20; // how much the turtle moves with each 'F'
 let angle = 90; // how much the turtle turns with a '-' or '+'
+//
 // LINDENMAYER STUFF (L-SYSTEMS)
 let thestring = 'A'; // "axiom" or start of the string
-let numloops = 5; // how many iterations to pre-compute
+let numloops = 6; // how many iterations to pre-compute
 let therules = []; // array for rules
 therules[0] = ['A', '-BF+AFA+FB-']; // first rule
 therules[1] = ['B', '+AF-BFB-FA+']; // second rule
@@ -17,7 +18,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   background("black");
   x = 0;
-  y = windowHeight - 1;
+  y = height - 1;
   // COMPUTE THE L-SYSTEM
   for (let i = 0; i < numloops; i++) {
     thestring = lindenmayer(thestring);
@@ -59,7 +60,7 @@ function drawIt(k) {
     let x1 = x + step * cos(radians(currentangle));
     let y1 = y + step * sin(radians(currentangle));
     // line(x, y, x1, y1); // connect the old and the new
-    strokeWeight(windowWidth / 256);
+    strokeWeight(width / 256);
     line(x, y, x1, y1); // connect the old and the new
     // update the turtle's position:
     x = x1;
