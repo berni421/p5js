@@ -1,5 +1,5 @@
-const fontSize = 36;
-const dY = fontSize * .75;
+let fontSize;
+let dY;
 let fontIpag;
 let fontDejaVuSerif;
 let cloud;
@@ -12,6 +12,8 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   background("black");
+  fontSize = (width + height) / 32;
+  dY = fontSize * .75;
   cloud = new RainCloud();
   pointLight("white", 0, height, width);
   camera(0, 0, width / 2, 0, 0, 0, 0, 1, 0)
