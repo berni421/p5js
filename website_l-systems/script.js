@@ -2,20 +2,23 @@
 // TURTLE STUFF:
 let x, y; // the current position of the turtle
 let currentangle = 0; // which way the turtle is pointing
-let step = 20; // how much the turtle moves with each 'F'
+let step = 64; // how much the turtle moves with each 'F'
 let angle = 90; // how much the turtle turns with a '-' or '+'
 //
 // LINDENMAYER STUFF (L-SYSTEMS)
 let thestring = 'A'; // "axiom" or start of the string
-let numloops = 6; // how many iterations to pre-compute
+let numloops = 5; // how many iterations to pre-compute
 let therules = []; // array for rules
 therules[0] = ['A', '-BF+AFA+FB-']; // first rule
 therules[1] = ['B', '+AF-BFB-FA+']; // second rule
 let whereinstring = 0; // where in the L-system are we?
 //
+// Animantion
+let nodes = []; // record of points so far
+//
 //
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight, WEBGL);
   background("black");
   x = 0;
   y = height - 1;
@@ -23,15 +26,24 @@ function setup() {
   for (let i = 0; i < numloops; i++) {
     thestring = lindenmayer(thestring);
   }
+  camera(
+    0, 0, (width + height) / 2,
+    0, 0, 0,
+    0, 1, 0);
 }
 //
 function draw() {
-  // draw the current character in the string:
-  drawIt(thestring[whereinstring]);
+  // plot the current character in the string:
+  if (nodes.length < 256) {
+    plotIt(thestring[whereinstring]);
+  }
   // increment the point for where we're reading the string.
   // wrap around at the end.
   whereinstring++;
   if (whereinstring > thestring.length - 1) whereinstring = 0;
+  //
+  // show current nodes
+  displayIt();
 }
 //
 // interpret an L-system
@@ -53,37 +65,73 @@ function lindenmayer(s) {
   return outputstring; // send out the modified string
 }
 //
-// this is a custom function that draws turtle commands
-function drawIt(k) {
+// this is a custom function that processes the turtle commands
+function plotIt(k) {
   if (k == 'F') { // draw forward
     // polar to cartesian based on step and currentangle:
     let x1 = x + step * cos(radians(currentangle));
     let y1 = y + step * sin(radians(currentangle));
-    // line(x, y, x1, y1); // connect the old and the new
-    strokeWeight(width / 256);
-    line(x, y, x1, y1); // connect the old and the new
+    let node = {
+      x: x,
+      y: y,
+      x1: x1,
+      y1: y1,
+    };
     // update the turtle's position:
     x = x1;
     y = y1;
+    // give me some random color values:
+    let red = random(128, 255);
+    let green = random(0, 192);
+    let blue = random(0, 50);
+    let c = color(red, green, blue);
+    node.c = c;
+    let radius = random(8, 32)
+    node.r = radius;
+    nodes.push(node);
   } else if (k == '+') {
     currentangle += angle; // turn left
   } else if (k == '-') {
     currentangle -= angle; // turn right
   }
-  // give me some random color values:
-  let r = random(128, 255);
-  let g = random(0, 192);
-  let b = random(0, 50);
-  let a = random(50, 150);
-  // pick a gaussian (D&D) distribution for the radius:
-  let radius = 0;
-  radius += random(0, 15);
-  radius += random(0, 15);
-  radius += random(0, 15);
-  radius = radius / 3;
-  // draw the stuff:
-  //
-  stroke(r, g, b, a);
-  fill(r, g, b, a);
-  ellipse(x, y, radius, radius);
+}
+
+function mousePressed() {
+  // Camera position
+  camX = map(mouseX, 0, width, -width / 2, width / 2);
+  camY = map(mouseY, 0, height, -height / 2, height / 2);
+  camera(
+    camX, camY, (width + height) / 2,
+    0, 0, 0,
+    0, 1, 0);
+  displayIt();
+}
+
+function displayIt() {
+  background("black");
+  ambientLight(64, 64, 64);
+  pointLight(255, 255, 255, 0, -(width + height), (width + height));
+  rotateY(frameCount / 256);
+  for (let i = 0; i < nodes.length; i++) {
+    let {
+      x: x,
+      y: y,
+      x1: x1,
+      y1: y1,
+      c: c,
+      r: r
+    } = nodes[i];
+    push();
+    stroke(c);
+    translate(-width / 2 + x, -height / 2 + y);
+    strokeWeight(width / 128);
+    line(0, 0, x1 - x, y1 - y); // connect the old and the new
+    //
+    translate(x1 - x, y1 - y);
+    specularMaterial(c);
+    shininess(256);
+    noStroke();
+    sphere(r, 16, 16);
+    pop();
+  }
 }
