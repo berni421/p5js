@@ -2,7 +2,7 @@
 // TURTLE STUFF:
 let x, y; // the current position of the turtle
 let currentangle = 0; // which way the turtle is pointing
-let step = 64; // how much the turtle moves with each 'F'
+let step; // how much the turtle moves with each 'F'
 let angle = 90; // how much the turtle turns with a '-' or '+'
 //
 // LINDENMAYER STUFF (L-SYSTEMS)
@@ -22,6 +22,7 @@ function setup() {
   background("black");
   x = 0;
   y = height - 1;
+  step = (width + height) / 32;
   // COMPUTE THE L-SYSTEM
   for (let i = 0; i < numloops; i++) {
     thestring = lindenmayer(thestring);
@@ -86,7 +87,7 @@ function plotIt(k) {
     let blue = random(0, 50);
     let c = color(red, green, blue);
     node.c = c;
-    let radius = random(8, 32)
+    let radius = random(step / 4, step / 2)
     node.r = radius;
     nodes.push(node);
   } else if (k == '+') {
@@ -124,7 +125,7 @@ function displayIt() {
     push();
     stroke(c);
     translate(-width / 2 + x, -height / 2 + y);
-    strokeWeight(width / 128);
+    strokeWeight(step / 16);
     line(0, 0, x1 - x, y1 - y); // connect the old and the new
     //
     translate(x1 - x, y1 - y);
