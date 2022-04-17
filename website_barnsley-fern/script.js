@@ -9,7 +9,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight, WEBGL);
+  createCanvas(windowWidth, windowHeight);
   textFont(myFont);
   background("black");
   frameRate(50);
@@ -20,14 +20,10 @@ function setup() {
 }
 //range −2.1820 < x < 2.6558 and 0 ≤ y < 9.9983.
 function drawPoint() {
-  let px = map(x, -2.1820 / zoom, 2.6558 / zoom, 0, width);
-  let py = map(y, 0, 9.9983 / zoom, height, 0);
-  push();
-  translate(-width / 2, -height / 2);
-  stroke("green");
-  strokeWeight(0.25);
+  let px = map(x * zoom, -2.1820, 2.6558, 0, width);
+  let py = map(y * zoom, 0, 9.9983, height, 0);
+  stroke("limegreen");
   point(px, py);
-  pop();
 }
 
 function nextPoint() {
@@ -53,10 +49,6 @@ function nextPoint() {
   }
   x = nextX;
   y = nextY;
-  let node = {
-    x: x,
-    y: y
-  };
 }
 
 function draw() {
@@ -64,19 +56,22 @@ function draw() {
     nextPoint();
     drawPoint();
   }
-  if (frameCount > 50 * 60 * 2) {
+  if (frameCount > 50 * 60 * 10) {
     print("done")
     noLoop();
   }
 }
 
 function mousePressed() {
-  zoom += 0.2;
+  zoom *= 2;
+  x = mouseX;
+  y = mouseY;
   background("black");
   title();
 }
 
 function title() {
   textSize(24);
-  text("Click mouse or touch screen to zoom into fractal", -width / 2 + 24, -height / 2 + 24)
+  fill("white");
+  text("Click mouse or touch screen to zoom into fractal", 24, 24);
 }
