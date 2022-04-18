@@ -1,29 +1,48 @@
 // ref https://en.wikipedia.org/wiki/Barnsley_fern
 let myFont;
-let x;
-let y;
+let bg;
 let zoom;
+let bgscale;
+let dx, dy, dw, dh;
+let sx, sy, sw, sh;
+let slider;
 
 function preload() {
   myFont = loadFont("../fonts/DejaVuSerif.ttf");
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  textFont(myFont);
+  createCanvas(
+    windowWidth,
+    windowHeight,
+    WEBGL);
   background("black");
-  frameRate(50);
+  textFont(myFont);
+  //
+  bgScale = 4;
+  bg = createGraphics(
+    width * bgScale,
+    height * bgScale,
+    WEBGL);
+  bg.background("black");
+  //
   x = 0;
   y = 0;
+  dx = 0;
+  dy = 0
+  dw = width;
+  dh = height;
+  sx = 0;
+  sy = 0;
+  sw = bg.width;
+  sh = bg.height;
+  //
   zoom = 1;
+  //
+  slider = createSlider(1, bgScale, 1, 0);
+  slider.position(24, 24);
+  slider.style('width', (width - 24 * 2) + 'px');
   title();
-}
-//range −2.1820 < x < 2.6558 and 0 ≤ y < 9.9983.
-function drawPoint() {
-  let px = map(x * zoom, -2.1820, 2.6558, 0, width);
-  let py = map(y * zoom, 0, 9.9983, height, 0);
-  stroke("limegreen");
-  point(px, py);
 }
 
 function nextPoint() {
@@ -52,26 +71,50 @@ function nextPoint() {
 }
 
 function draw() {
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 2048; i++) {
     nextPoint();
     drawPoint();
   }
+  background("black");
+  push();
+  rotateY(frameCount * 0.01);
+  zoom = slider.value();
+  image(
+    bg,
+    dx - dw / 2,
+    dy - dh / 2,
+    dw,
+    dh,
+    sx + (sw - sw / zoom) / 2,
+    sy + (sh - sh / zoom) / 2,
+    sw / zoom,
+    sh / zoom
+  );
+  pop();
+  // title();
   if (frameCount > 50 * 60 * 10) {
     print("done")
     noLoop();
   }
 }
 
-function mousePressed() {
-  zoom *= 2;
-  x = mouseX;
-  y = mouseY;
-  background("black");
-  title();
-}
-
 function title() {
+  push();
+  translate(-width / 2, -height / 2);
   textSize(24);
   fill("white");
-  text("Click mouse or touch screen to zoom into fractal", 24, 24);
+  text("Use slider to zoom fractal", 24, 24);
+  text("zoom: " + zoom.toFixed(2), 24, 48);
+  pop();
+}
+
+function drawPoint() {
+  //range −2.1820 < x < 2.6558 and 0 ≤ y < 9.9983.
+  let px = map(x, -2.1820, 2.6558, 0, bg.width);
+  let py = map(y, 0, 9.9983, bg.height, 0);
+  bg.push();
+  bg.stroke("limegreen");
+  bg.translate(-bg.width / 2, -bg.height / 2);
+  bg.point(px, py);
+  bg.pop();
 }
