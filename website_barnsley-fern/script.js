@@ -1,5 +1,6 @@
 // ref https://en.wikipedia.org/wiki/Barnsley_fern
 let myFont;
+let play;
 let bg;
 let zoom;
 let bgscale;
@@ -41,6 +42,8 @@ function setup() {
   slider = createSlider(zoom, bgScale * 4, zoom, 0);
   slider.position(24, 24);
   slider.style('width', (width - 24 * 2) + 'px');
+  //
+  play = false;
 }
 
 function nextPoint() {
@@ -69,7 +72,7 @@ function nextPoint() {
 }
 
 function draw() {
-  for (let i = 0; i < 256 * bgScale; i++) {
+  for (let i = 0; i < 128 * bgScale; i++) {
     nextPoint();
     drawPoint();
   }
@@ -90,21 +93,29 @@ function draw() {
     sh / zoom
   );
   pop();
-  // title();
-  if (frameCount > 50 * 60 * 10) {
-    print("done")
-    noLoop();
+  if (false == play) {
+    Stop();
   }
 }
-// function title() {
-//   push();
-//   translate(-width / 2, -height / 2);
-//   textSize(24);
-//   fill("white");
-//   text("Use slider to zoom fractal", 24, 24 * 3);
-//   text("zoom: " + zoom.toFixed(2), 24, 24 * 4);
-//   pop();
-// }
+
+function Stop() {
+  play = false;
+  noLoop();
+  push();
+  rotateY(frameCount * 0.01);
+  fill("red");
+  let s = (width + height) / 50;
+  triangle(-s * 4, -s * 2, -s, 0, -s * 4, s * 2);
+  pop();
+}
+
+function mousePressed() {
+  play = !play;
+  if (play) {
+    loop();
+  }
+}
+
 function drawPoint() {
   //range −2.1820 < x < 2.6558 and 0 ≤ y < 9.9983.
   let px = map(x, -2.1820, 2.6558, 0, bg.width);

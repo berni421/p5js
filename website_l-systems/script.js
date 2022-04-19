@@ -15,6 +15,7 @@ let whereinstring = 0; // where in the L-system are we?
 //
 // Animantion
 let nodes = []; // record of points so far
+let play; // play or pause button
 //
 //
 function setup() {
@@ -31,6 +32,7 @@ function setup() {
     0, 0, (width + height) / 2,
     0, 0, 0,
     0, 1, 0);
+  play = false;
 }
 //
 function draw() {
@@ -45,6 +47,22 @@ function draw() {
   //
   // show current nodes
   displayIt();
+  if (false == play) {
+    Stop();
+  }
+}
+
+function Stop() {
+  play = false;
+  noLoop();
+  push();
+  // rotateY(frameCount * 0.01);
+  rotateY(-frameCount / 256);
+  ambientLight("white");
+  fill("red");
+  let s = (width + height) / 50;
+  triangle(-s * 4, -s * 2, -s, 0, -s * 4, s * 2);
+  pop();
 }
 //
 // interpret an L-system
@@ -106,6 +124,10 @@ function mousePressed() {
     0, 0, 0,
     0, 1, 0);
   displayIt();
+  play = !play;
+  if (play) {
+    loop();
+  }
 }
 
 function displayIt() {
