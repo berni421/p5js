@@ -38,11 +38,9 @@ function setup() {
   sh = bg.height;
   //
   zoom = 1;
-  //
-  slider = createSlider(1, bgScale, 1, 0);
+  slider = createSlider(zoom, bgScale * 4, zoom, 0);
   slider.position(24, 24);
   slider.style('width', (width - 24 * 2) + 'px');
-  title();
 }
 
 function nextPoint() {
@@ -71,13 +69,14 @@ function nextPoint() {
 }
 
 function draw() {
-  for (let i = 0; i < 2048; i++) {
+  for (let i = 0; i < 256 * bgScale; i++) {
     nextPoint();
     drawPoint();
   }
   background("black");
+  // title();
   push();
-  rotateY(frameCount * 0.01);
+  rotateY(frameCount * -0.01);
   zoom = slider.value();
   image(
     bg,
@@ -97,17 +96,15 @@ function draw() {
     noLoop();
   }
 }
-
-function title() {
-  push();
-  translate(-width / 2, -height / 2);
-  textSize(24);
-  fill("white");
-  text("Use slider to zoom fractal", 24, 24);
-  text("zoom: " + zoom.toFixed(2), 24, 48);
-  pop();
-}
-
+// function title() {
+//   push();
+//   translate(-width / 2, -height / 2);
+//   textSize(24);
+//   fill("white");
+//   text("Use slider to zoom fractal", 24, 24 * 3);
+//   text("zoom: " + zoom.toFixed(2), 24, 24 * 4);
+//   pop();
+// }
 function drawPoint() {
   //range −2.1820 < x < 2.6558 and 0 ≤ y < 9.9983.
   let px = map(x, -2.1820, 2.6558, 0, bg.width);
