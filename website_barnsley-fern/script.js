@@ -44,6 +44,10 @@ function setup() {
   slider.style('width', (width - 24 * 2) + 'px');
   //
   play = false;
+  //
+  axisX = createVector(1, 0, 0);
+  axisY = createVector(0, 1, 0);
+  axisZ = createVector(0, 0, 1);
 }
 
 function nextPoint() {
@@ -79,7 +83,7 @@ function draw() {
   background("black");
   // title();
   push();
-  rotateY(frameCount * -0.01);
+  rotate(frameCount * -0.01, axisY);
   zoom = slider.value();
   image(
     bg,
@@ -102,7 +106,7 @@ function Stop() {
   play = false;
   noLoop();
   push();
-  rotateY(frameCount * 0.01);
+  rotate(frameCount * 0.01, axisY);
   fill("red");
   let s = (width + height) / 50;
   triangle(-s * 4, -s * 2, -s, 0, -s * 4, s * 2);
