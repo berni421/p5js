@@ -17,29 +17,39 @@ function setup() {
   dY = fontSize * .75;
   cloud = new RainCloud();
   pointLight("white", 0, height, width);
-  camera(0, 0, width / 2, 0, 0, 0, 0, 1, 0)
+  camera(0, 0, (height + width) / 2, 0, 0, 0, 0, 1, 0)
   // frameRate(24);
   play = false;
 }
 
 function draw() {
-  rotateY(frameCount * 0.01);
-  background("black");
-  cloud.display();
-  cloud.update();
   if (false == play) {
     Stop();
+  } else {
+    Play();
   }
+}
+
+function Play() {
+  background("black");
+  rotateY(frameCount * 0.01);
+  cloud.display();
+  cloud.update();
 }
 
 function Stop() {
   play = false;
   noLoop();
   push();
-  rotateY(-frameCount * 0.01);
+  translate(0, 0, 0);
   fill("red");
-  let s = (width + height) / 50;
-  triangle(-s * 4, -s * 2, -s, 0, -s * 4, s * 2);
+  noStroke();
+  beginShape();
+  let s = (width + height) / 25;
+  vertex(-s / 2, -s, 1);
+  vertex(s / 2, 0, 1);
+  vertex(-s / 2, s, 1);
+  endShape(CLOSE);
   pop();
 }
 

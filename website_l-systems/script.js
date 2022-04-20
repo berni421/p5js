@@ -36,6 +36,30 @@ function setup() {
 }
 //
 function draw() {
+  if (false == play) {
+    Stop();
+  } else {
+    Play();
+  }
+}
+
+function Stop() {
+  play = false;
+  noLoop();
+  push();
+  translate(0, 0, 0);
+  fill("red");
+  noStroke();
+  beginShape();
+  let s = (width + height) / 25;
+  vertex(-s / 2, -s, 1);
+  vertex(s / 2, 0, 1);
+  vertex(-s / 2, s, 1);
+  endShape(CLOSE);
+  pop();
+}
+
+function Play() {
   // plot the current character in the string:
   if (nodes.length < 256) {
     plotIt(thestring[whereinstring]);
@@ -47,24 +71,7 @@ function draw() {
   //
   // show current nodes
   displayIt();
-  if (false == play) {
-    Stop();
-  }
 }
-
-function Stop() {
-  play = false;
-  noLoop();
-  push();
-  // rotateY(frameCount * 0.01);
-  rotateY(-frameCount / 256);
-  ambientLight("white");
-  fill("red");
-  let s = (width + height) / 50;
-  triangle(-s * 4, -s * 2, -s, 0, -s * 4, s * 2);
-  pop();
-}
-//
 // interpret an L-system
 function lindenmayer(s) {
   let outputstring = ''; // start a blank output string
@@ -116,14 +123,14 @@ function plotIt(k) {
 }
 
 function mousePressed() {
-  // Camera position
-  camX = map(mouseX, 0, width, -width / 2, width / 2);
-  camY = map(mouseY, 0, height, -height / 2, height / 2);
-  camera(
-    camX, camY, (width + height) / 2,
-    0, 0, 0,
-    0, 1, 0);
-  displayIt();
+  // // Camera position
+  // camX = map(mouseX, 0, width, -width / 2, width / 2);
+  // camY = map(mouseY, 0, height, -height / 2, height / 2);
+  // camera(
+  //   camX, camY, (width + height) / 2,
+  //   0, 0, 0,
+  //   0, 1, 0);
+  // displayIt();
   play = !play;
   if (play) {
     loop();
@@ -134,7 +141,7 @@ function displayIt() {
   background("black");
   ambientLight(64, 64, 64);
   pointLight(255, 255, 255, 0, -(width + height), (width + height));
-  rotateY(frameCount / 256);
+  //rotateY(frameCount / 256);
   for (let i = 0; i < nodes.length; i++) {
     let {
       x: x,
