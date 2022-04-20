@@ -44,10 +44,6 @@ function setup() {
   slider.style('width', (width - 24 * 2) + 'px');
   //
   play = false;
-  //
-  axisX = createVector(1, 0, 0);
-  axisY = createVector(0, 1, 0);
-  axisZ = createVector(0, 0, 1);
 }
 
 function nextPoint() {
@@ -76,14 +72,22 @@ function nextPoint() {
 }
 
 function draw() {
+  if (false == play) {
+    Stop();
+  } else {
+    Play();
+  }
+}
+
+function Play() {
   for (let i = 0; i < 128 * bgScale; i++) {
     nextPoint();
     drawPoint();
   }
   background("black");
-  // title();
   push();
-  rotate(frameCount * -0.01, axisY);
+  translate(0, 0, 0);
+  rotateY(frameCount * -0.01);
   zoom = slider.value();
   image(
     bg,
@@ -97,19 +101,21 @@ function draw() {
     sh / zoom
   );
   pop();
-  if (false == play) {
-    Stop();
-  }
 }
 
 function Stop() {
   play = false;
   noLoop();
   push();
-  rotate(frameCount * 0.01, axisY);
+  translate(0, 0, 0);
   fill("red");
-  let s = (width + height) / 50;
-  triangle(-s * 4, -s * 2, -s, 0, -s * 4, s * 2);
+  noStroke();
+  beginShape();
+  let s = (width + height) / 25;
+  vertex(-s / 2, -s, 1);
+  vertex(s / 2, 0, 1);
+  vertex(-s / 2, s, 1);
+  endShape(CLOSE);
   pop();
 }
 
