@@ -27,6 +27,10 @@ function Stop() {
   push();
   translate(0, 0, 0);
   fill("red");
+  const pixelColour = get(width / 2, height / 2);
+  if (pixelColour[0] > 200) {
+    fill("blue");
+  }
   noStroke();
   beginShape();
   let s = (width + height) / 25;
