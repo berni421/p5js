@@ -23,7 +23,7 @@ function setup() {
     const ball = new Ball(
       random(0, bg.width),
       random(0, bg.height),
-      random(512, 4096)
+      random(bg.width + bg.height, windowScale * (bg.width + bg.height))
     )
     balls.push(ball);
   }
@@ -36,8 +36,8 @@ function draw() {
     Play();
   }
 }
-
-function Play() {
+async function Play() {
+  background("black");
   for (let x = 0; x < bg.width; x++) {
     for (let y = 0; y < bg.height; y++) {
       let sum = 0;
@@ -60,6 +60,7 @@ function Play() {
     }
   }
   image(bg, -width / 2, -height / 2, width, height);
+  await new Promise(resolve => setTimeout(resolve, 1));
   for (let i = 0; i < balls.length; i++) {
     balls[i].update(bg.width, bg.height);
   }
