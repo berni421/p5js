@@ -2,7 +2,6 @@ let myFont; // for WEBGL text
 let play; // to control play or pause (true or false)
 let balls; // store metaballs
 let bg; // compute image to offscreen store
-let windowScale;
 //
 function preload() {
   myFont = loadFont("../fonts/DejaVuSerif.ttf");
@@ -15,15 +14,14 @@ function setup() {
   background("black");
   play = false;
   //
-  windowScale = 8;
-  bg = createGraphics(width / windowScale, height / windowScale, WEBGL);
+  bg = createGraphics(128, 128, WEBGL);
   bg.colorMode(HSB);
   balls = [];
   for (let i = 0; i < 5; i++) {
     const ball = new Ball(
       random(0, bg.width),
       random(0, bg.height),
-      random(bg.width + bg.height, windowScale * (bg.width + bg.height))
+      random(8 * (bg.width + bg.height), 16 * (bg.width + bg.height))
     )
     balls.push(ball);
   }
