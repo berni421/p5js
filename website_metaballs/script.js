@@ -1,32 +1,26 @@
-let myFont; // for WEBGL text
 let play; // to control play or pause (true or false)
 let balls; // store metaballs
-let bg; // compute image to offscreen store
+let density; // pixel zoom
 //
-function preload() {
-  myFont = loadFont("../fonts/DejaVuSerif.ttf");
-}
-
 function setup() {
-  createCanvas(windowWidth, windowHeight, WEBGL);
-  textFont(myFont);
+  createCanvas(windowWidth, windowHeight);
+  pixelDensity(1);
   colorMode(HSB);
   background("black");
   play = false;
   //
-  bg = createGraphics(128, 128, WEBGL);
-  bg.colorMode(HSB);
   balls = [];
+  density = 4;
   for (let i = 0; i < 5; i++) {
     const ball = new Ball(
-      random(0, bg.width),
-      random(0, bg.height),
-      random(8 * (bg.width + bg.height), 16 * (bg.width + bg.height))
+      random(0, width),
+      random(0, height),
+      random(2 * (width + height), 16 * (width + height))
     )
     balls.push(ball);
   }
 }
-
+//
 function draw() {
   if (false == play) {
     Stop();
@@ -34,10 +28,14 @@ function draw() {
     Play();
   }
 }
-async function Play() {
+//
+function Play() {
   background("black");
-  for (let x = 0; x < bg.width; x++) {
-    for (let y = 0; y < bg.height; y++) {
+  //
+  loadPixels();
+  //
+  for (let x = 0; x < width; x += density) {
+    for (let y = 0; y < height; y += density) {
       let sum = 0;
       for (let i = 0; i < balls.length; i++) {
         const {
@@ -49,41 +47,49 @@ async function Play() {
         const ydif = y - by;
         const d = sqrt(xdif * xdif + ydif * ydif);
         sum += br / d;
+        colour = color(sum, 255, 255);
+        for (let dx = x; dx < x + density && dx < width; dx++) {
+          for (let dy = y; dy < y + density && dy < height; dy++) {
+            const p = (dy * width + dx) * 4;
+            pixels[p] = colour.levels[0];
+            pixels[p + 1] = colour.levels[1];
+            pixels[p + 2] = colour.levels[2];
+            pixels[p + 3] = colour.levels[3];
+          }
+        }
       }
-      bg.push();
-      bg.translate(-bg.width / 2, -bg.height / 2);
-      bg.stroke(color(sum, 255, 255));
-      bg.point(x, y);
-      bg.pop();
     }
   }
-  image(bg, -width / 2, -height / 2, width, height);
-  await new Promise(resolve => setTimeout(resolve, 1));
+  //
+  updatePixels();
+  //
   for (let i = 0; i < balls.length; i++) {
-    balls[i].update(bg.width, bg.height);
+    balls[i].update(width, height);
   }
 }
-
+//
 function Stop() {
   play = false;
   noLoop();
   push();
-  translate(0, 0, 0);
   fill("red")
-  const pixelColour = get(width / 2, height / 2);
-  if (pixelColour[0] > 200) {
+  const pr = get(width / 2, height / 2)[0];
+  if (pr > 200) {
     fill("blue");
   }
   noStroke();
-  beginShape();
   const s = (width + height) / 25;
-  vertex(-s / 2, -s, 1);
-  vertex(s / 2, 0, 1);
-  vertex(-s / 2, s, 1);
-  endShape(CLOSE);
+  translate(width / 2, height / 2);
+  triangle(-s / 2, -s, s / 2, 0, -s / 2, s)
   pop();
+  fill("white");
+  const tr = get(textSize(), height - textSize())[0];
+  if (tr > 200) {
+    fill("black");
+  }
+  text(",", textSize(), height - textSize());
 }
-
+//
 function mousePressed() {
   play = !play;
   if (play) {
