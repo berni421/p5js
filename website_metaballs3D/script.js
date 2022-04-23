@@ -10,7 +10,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   textFont(myFont);
-  // pixealDensity(1);
+  pixelDensity(1);
   colorMode(HSB);
   background("black");
   play = false;
@@ -22,7 +22,7 @@ function setup() {
     const ball = new Ball(
       random(0, bg.width),
       random(0, bg.height),
-      random(4 * (bg.width + bg.height), 16 * (bg.width + bg.height))
+      random(2 * (bg.width + bg.height), 8 * (bg.width + bg.height))
     )
     balls.push(ball);
   }
@@ -60,17 +60,18 @@ function Play() {
   }
   //
   push();
-  rotateY(-PI / 2);
   noStroke();
   translate(0, 0, 0);
+  // rotateY(PI);
+  rotateX(PI);
   texture(bg);
-  const radius = min(height, width) / 3;
+  const radius = min(height, width) / 2;
   // print(radius);
   sphere(radius, 24, 24);
   pop();
   //
   for (let i = 0; i < balls.length; i++) {
-    balls[i].update(width, height);
+    balls[i].update(bg.width, bg.height);
   }
 }
 //

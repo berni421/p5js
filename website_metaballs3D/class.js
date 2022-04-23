@@ -10,7 +10,7 @@ class Ball {
   update(w, h) {
     this.x += this.xspeed;
     this.y += this.yspeed;
-    if (this.x > width || this.x < 0) this.xspeed *= -1;
-    if (this.y > height || this.y < 0) this.yspeed *= -1;
+    if (this.x > w || this.x < 0) this.xspeed *= -1;
+    if (this.y > h || this.y < 0) this.yspeed *= -1;
   }
 }
