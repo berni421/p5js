@@ -1,7 +1,7 @@
-let myFont; // for WEBGL text
 let play; // to control play or pause (true or false)
 let balls; // store metaballs
-let bg; // compute image to offscreen store
+let density; // pixel zoom
+let bg; // texture workspace
 //
 function preload() {
   myFont = loadFont("../fonts/DejaVuSerif.ttf");
@@ -10,18 +10,19 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   textFont(myFont);
+  // pixealDensity(1);
   colorMode(HSB);
   background("black");
   play = false;
-  //
-  bg = createGraphics(128, 128, WEBGL);
+  density = 8;
+  bg = createGraphics(windowWidth / density, windowHeight / density);
   bg.colorMode(HSB);
   balls = [];
   for (let i = 0; i < 5; i++) {
     const ball = new Ball(
       random(0, bg.width),
       random(0, bg.height),
-      random(8 * (bg.width + bg.height), 16 * (bg.width + bg.height))
+      random(4 * (bg.width + bg.height), 16 * (bg.width + bg.height))
     )
     balls.push(ball);
   }
@@ -51,21 +52,25 @@ function Play() {
         const ydif = y - by;
         const d = sqrt(xdif * xdif + ydif * ydif);
         sum += br / d;
+        colour = color(sum, 255, 255);
+        bg.stroke(colour);
+        bg.point(x, y);
       }
-      bg.push();
-      bg.translate(-bg.width / 2, -bg.height / 2);
-      bg.stroke(color(sum, 255, 255));
-      bg.point(x, y);
-      bg.pop();
     }
   }
   //
-  print("1 image ready:", new Date());
-  image(bg, -width / 2, -height / 2, width, height);
+  push();
+  rotateY(-PI / 2);
+  noStroke();
+  translate(0, 0, 0);
+  texture(bg);
+  const radius = min(height, width) / 3;
+  // print(radius);
+  sphere(radius, 24, 24);
+  pop();
   //
-  print("2 updating:", new Date());
   for (let i = 0; i < balls.length; i++) {
-    balls[i].update(bg.width, bg.height);
+    balls[i].update(width, height);
   }
 }
 //
@@ -73,25 +78,32 @@ function Stop() {
   play = false;
   noLoop();
   push();
-  translate(0, 0, 0);
   fill("red")
-  const pixelColour = get(width / 2, height / 2)[0];
-  if (pixelColour > 200) {
+  const pr = get(width / 2, height / 2)[0];
+  if (pr > 200) {
     fill("blue");
   }
   noStroke();
-  beginShape();
   const s = (width + height) / 25;
-  vertex(-s / 2, -s, 1);
-  vertex(s / 2, 0, 1);
-  vertex(-s / 2, s, 1);
-  endShape(CLOSE);
+  // translate(width / 2, height / 2);
+  triangle(-s / 2, -s, s / 2, 0, -s / 2, s)
   pop();
+  fill("white");
+  const tr = get(textSize(), height - textSize())[0];
+  if (tr > 200) {
+    fill("black");
+  }
+  text("=", textSize(), height - textSize());
 }
 //
-function mousePressed() {
+function mouseClicked() {
+  return touchStarted();
+}
+//
+function touchStarted() {
   play = !play;
   if (play) {
     loop();
   }
+  return false;
 }

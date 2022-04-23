@@ -87,17 +87,17 @@ function Stop() {
   if (tr > 200) {
     fill("black");
   }
-  text("|", textSize(), height - textSize());
+  // text("=", textSize(), height - textSize());
 }
 //
-function mousePressed() {
+function mouseClicked() {
+  return touchStarted();
+}
+//
+function touchStarted() {
   play = !play;
   if (play) {
     loop();
   }
   return false;
-}
-//
-function touchStarted() {
-  return mousePressed();
 }

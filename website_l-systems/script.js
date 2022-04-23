@@ -121,17 +121,17 @@ function plotIt(k) {
     currentangle -= angle; // turn right
   }
 }
-
-function mousePressed() {
+//
+function mouseClicked() {
+  return touchStarted();
+}
+//
+function touchStarted() {
   play = !play;
   if (play) {
     loop();
   }
   return false;
-}
-//
-function touchStarted() {
-  return mousePressed();
 }
 
 function displayIt() {

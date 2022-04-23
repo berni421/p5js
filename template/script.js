@@ -40,15 +40,15 @@ function Stop() {
   endShape(CLOSE);
   pop();
 }
-
+//
 function mousePressed() {
+  return touchStarted();
+}
+//
+function touchStarted() {
   play = !play;
   if (play) {
     loop();
   }
   return false;
-}
-//
-function touchStarted() {
-  return mousePressed();
 }
