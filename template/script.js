@@ -46,4 +46,9 @@ function mousePressed() {
   if (play) {
     loop();
   }
+  return false;
+}
+//
+function touchStarted() {
+  return mousePressed();
 }

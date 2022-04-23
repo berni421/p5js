@@ -87,7 +87,7 @@ function Stop() {
   if (tr > 200) {
     fill("black");
   }
-  text(",", textSize(), height - textSize());
+  text("|", textSize(), height - textSize());
 }
 //
 function mousePressed() {
@@ -95,4 +95,9 @@ function mousePressed() {
   if (play) {
     loop();
   }
+  return false;
+}
+//
+function touchStarted() {
+  return mousePressed();
 }

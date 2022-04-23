@@ -123,18 +123,15 @@ function plotIt(k) {
 }
 
 function mousePressed() {
-  // // Camera position
-  // camX = map(mouseX, 0, width, -width / 2, width / 2);
-  // camY = map(mouseY, 0, height, -height / 2, height / 2);
-  // camera(
-  //   camX, camY, (width + height) / 2,
-  //   0, 0, 0,
-  //   0, 1, 0);
-  // displayIt();
   play = !play;
   if (play) {
     loop();
   }
+  return false;
+}
+//
+function touchStarted() {
+  return mousePressed();
 }
 
 function displayIt() {
