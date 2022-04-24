@@ -9,6 +9,7 @@ function setup() {
   textFont(myFont);
   background("black");
   play = false;
+  frameRate(10);
 }
 
 function spiral() {
@@ -39,9 +40,9 @@ function draw() {
 
 function Play() {
   background("black");
-  const frameFix = 0.01;
-  rotateX(frameCount * frameFix);
-  rotateY(frameCount * frameFix);
+  const frameFix = 0.02;
+  // rotateX(frameCount * frameFix);
+  // rotateY(frameCount * frameFix);
   rotateZ(frameCount * frameFix);
   spiral();
 }
