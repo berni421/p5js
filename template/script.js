@@ -25,15 +25,15 @@ function Stop() {
   play = false;
   noLoop();
   push();
-  translate(0, 0, 0);
+  translate(width / 2, height / 2);
   fill("red");
   const pixelColour = get(width / 2, height / 2);
   if (pixelColour[0] > 200) {
     fill("blue");
   }
   noStroke();
-  beginShape();
   let s = (width + height) / 25;
+  beginShape();
   vertex(-s / 2, -s, 1);
   vertex(s / 2, 0, 1);
   vertex(-s / 2, s, 1);
