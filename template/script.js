@@ -1,5 +1,6 @@
 let myFont; // for WEBGL text
 let play; // to control play or pause (true or false)
+//
 function preload() {
   myFont = loadFont("../fonts/DejaVuSerif.ttf");
 }
@@ -13,31 +14,34 @@ function setup() {
 
 function draw() {
   if (false == play) {
-    Stop();
+    stop();
   } else {
-    Play();
+    resume();
   }
 }
 
-function Play() {}
+function resume() {
+  //
+}
 
-function Stop() {
+function stop() {
   play = false;
   noLoop();
   push();
-  translate(width / 2, height / 2);
   fill("red");
-  const pixelColour = get(width / 2, height / 2);
+  const pixelColour = get(width / 2, height / 2, 0);
   if (pixelColour[0] > 200) {
     fill("blue");
   }
   noStroke();
   let s = (width + height) / 25;
-  beginShape();
-  vertex(-s / 2, -s, 1);
-  vertex(s / 2, 0, 1);
-  vertex(-s / 2, s, 1);
-  endShape(CLOSE);
+  translate(width / 2, height / 4);
+  triangle(-s / 2, -s, s / 2, 0, -s / 2, s);
+  // beginShape();
+  // vertex(-s / 2, -s, 1);
+  // vertex(s / 2, 0, 1);
+  // vertex(-s / 2, s, 1);
+  // endShape(CLOSE);
   pop();
 }
 //
