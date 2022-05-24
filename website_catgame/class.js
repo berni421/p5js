@@ -4,8 +4,8 @@ class Mouse {
     let r = int(random(mr, 2 * mr));
     this.x = int(random(0, width - r));
     this.y = int(random(0, height - r));
-    let vx = int(random(12, 18));
-    let vy = int(random(12, 18));
+    let vx = int(random(mr / 4, mr / 2));
+    let vy = int(random(mr / 4, mr / 2));
     if (random(1) > 0.5) {
       vx = -vx;
     }
