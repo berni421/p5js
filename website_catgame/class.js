@@ -1,11 +1,10 @@
 class Mouse {
-  constructor(mImage, name) {
-    const mr = int(width / 12);
-    let r = int(random(mr, 2 * mr));
+  constructor(mImage, name, mr) {
+    let r = int(random(mr / 2, mr));
     this.x = int(random(0, width - r));
     this.y = int(random(0, height - r));
-    let vx = int(random(mr / 4, mr / 2));
-    let vy = int(random(mr / 4, mr / 2));
+    let vx = int(random(mr / 8, mr / 4));
+    let vy = int(random(mr / 8, mr / 4));
     if (random(1) > 0.5) {
       vx = -vx;
     }

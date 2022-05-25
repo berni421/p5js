@@ -1,21 +1,29 @@
 const mice = [];
 let mouseImage;
 let mouseSounds;
+// let myFont;
+// const fontSize = 12;
+let miceMax;
 
 function preload() {
   // print("start preload");
   mouseImage = loadImage("../images/mouse.jpg");
   soundFormats("ogg", "mp3");
   mouseSounds = loadSound("../sounds/mouse-sounds.mp3");
+  // myFont = loadFont("../fonts/DejaVuSerif.ttf");
   // print("end preload");
 }
 
 function setup() {
   // print("start setup");
   createCanvas(windowWidth, windowHeight, WEBGL);
-  for (let i = 0; i < 6; i++) {
+  miceMax = int(windowWidth / 256);
+  if (miceMax == 0) {
+    miceMax = 1;
+  }
+  for (let i = 0; i < miceMax; i++) {
     // print("try:", i)
-    const mouse = new Mouse(mouseImage, i);
+    const mouse = new Mouse(mouseImage, i, 64);
     const o = overlaps(mouse);
     if (!o) {
       mice.push(mouse);
@@ -36,6 +44,13 @@ function draw() {
     mouse.display();
     fixCollision(mouse);
   }
+  // textFont(myFont);
+  // textSize(fontSize)
+  // // fill("black");
+  // x = -width / 2;
+  // text("width: " + width, x, 0);
+  // text("height: " + height, x, fontSize);
+  // text("mice: " + miceMax, x, fontSize * 2);
 }
 
 function fixCollision(mouse) {
@@ -78,6 +93,10 @@ function overlaps(mouse) {
 function mousePressed() {
   noLoop();
   mouseSounds.stop();
+}
+
+function touchStarted() {
+  mousePressed();
 }
 
 function mouseReleased() {
