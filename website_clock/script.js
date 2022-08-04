@@ -81,8 +81,8 @@ function draw() {
     monthPad + dayMonth[month] + " " +
     year;
   textSize(width * 0.1);
-  text(time, width / 2, height * 0.25);
-  textSize(width * 0.075);
-  text(dayName[dayOfWeek] + " " + dayPeriod[hours], width / 2, height * 0.5);
-  text(date, width / 2, height * 0.75);
+  text(time, width / 2, height * 0.2);
+  text(dayName[dayOfWeek], width / 2, height * 0.4);
+  text(dayPeriod[hours], width / 2, height * 0.6);
+  text(date, width / 2, height * 0.8);
 }
