@@ -4,6 +4,7 @@ let mouseSounds;
 // let myFont;
 // const fontSize = 12;
 let miceMax;
+const mouseSR = 64;
 
 function preload() {
   // print("start preload");
@@ -23,7 +24,7 @@ function setup() {
   }
   for (let i = 0; i < miceMax; i++) {
     // print("try:", i)
-    const mouse = new Mouse(mouseImage, i, 64);
+    const mouse = new Mouse(mouseImage, i, mouseSR);
     const o = overlaps(mouse);
     if (!o) {
       mice.push(mouse);
@@ -90,16 +91,50 @@ function overlaps(mouse) {
   return false;
 }
 
+function overlapsXY(x, y, msr) {
+  const mX = x;
+  const mY = y;
+  const sr = msr;
+  for (let i = 0; i < mice.length; i++) {
+    const iX = mice[i].x;
+    const iY = mice[i].y;
+    const clearX = (mX + sr < iX) || (iX + sr < mX);
+    // const clearX = abs(mX - iX) > sr;
+    const clearY = (mY + sr < iY) || (iY + sr < mY);
+    // const clearY = abs(mY - iY) > sr;
+    const o = (!clearX && !clearY);
+    if (o) {
+      // print("overlaps:", mouse.name, " and ", mice[i].name);
+      return true;
+    }
+  }
+  return false;
+}
+
+function addMouse() {
+  let mouse = new Mouse(mouseImage, miceMax + 1, mouseSR);
+  while (overlaps(mouse)) {
+    mouse = new Mouse(mouseImage, miceMax + 1, mouseSR);
+  }
+  miceMax++;
+  mice.push(mouse);
+}
+
 function mousePressed() {
-  noLoop();
-  mouseSounds.stop();
+  // noLoop();
+  // mouseSounds.stop();
+  if (overlapsXY(mouseX, mouseY, mouseSR)) {
+    addMouse();
+  }
 }
 
 function touchStarted() {
-  mousePressed();
+  if (touches.length > 0 && (overlapsXY(touches[0].x, touches[0].y, mouseSR))) {
+    addMouse();
+  }
 }
 
 function mouseReleased() {
-  loop();
-  mouseSounds.loop();
+  // loop();
+  // mouseSounds.loop();
 }
