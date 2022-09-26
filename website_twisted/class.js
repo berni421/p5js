@@ -1,11 +1,11 @@
 class Strip {
-  constructor(x, y, z, width, length, amplitude) {
+  constructor(x, y, z, width, length) {
     this.x = x;
     this.y = y;
     this.z = z;
     this.width = width;
     this.length = length;
-    this.amplitude = amplitude;
+    this.rotation = random(TWO_PI);
     this.red = random(0, 255);
     this.blue = random(0, 255);
     this.green = random(0, 255);
@@ -16,40 +16,61 @@ class Strip {
     print("z: ", this.z);
     print("width: ", this.width);
     print("length: ", this.length);
-    print("amplitude: ", this.amplitude);
+    print("rotation: ", this.rotation);
   }
   display() {
     // print("start display")
+    let rotation = this.rotation;
     push();
     // this.logthis();
     translate(this.x, this.y - this.width, this.z);
-    // print("this.y: ", this.y);
-    fill(this.red, this.blue, this.green);
+    rotateX(rotation);
+    //
+    // Lighting
+    let locX = mouseX - width / 2;
+    let locY = mouseY - height / 2;
+    ambientLight(128, 128, 128);
+    pointLight(255, 255, 255, -width / 2, -height / 2, width + height);
+    pointLight(255, 255, 255, width / 2, height / 2, width + height);
+    // directionalLight(128, 128, 128, locX, locY, -1);
+    // spotLight(128, 128, 128, locX, locY, width + height, 0, 0, -1, PI / 8);
+    // Material
+    // normalMaterial(); //debugging
+    // ambientMaterial(this.red, this.blue, this.green); // black
+    // emissiveMaterial(this.red, this.blue, this.green); // black
+    specularMaterial(this.red, this.blue, this.green);
+    shininess(128);
+    // fill(this.red, this.blue, this.green);
     noStroke();
-    var increment = 10;
-    for (var x = this.x; x < this.x + this.length; x += increment) {
-      plane(increment, this.width * this.amplitude * sin(this.y));
-      translate(increment, 0, 0);
+    const resolution = 512;
+    const incrementX = this.length / resolution;
+    const rotations = 0.5;
+    const rotationStep = (incrementX * rotations * TWO_PI / this.length);
+    for (var x = this.x; x < this.x + this.length; x += incrementX) {
+      plane(incrementX, this.width); // no ligting options
+      box(incrementX, this.width, 1);
+      translate(incrementX, 0, 0);
+      rotateX(rotationStep);
+      rotation += rotationStep;
     }
     pop();
+    this.rotation = rotation;
+    const rotationSpeed = this.width;
+    this.rotation += rotationSpeed * rotationStep; // animation
     // print("end display")
   }
-  update() {
-    this.red--;
-    if (this.red < 0) this.red = 255;
-    this.blue--;
-    if (this.blue < 0) this.blue = 255;
-    this.red--;
-    if (this.green < 0) this.green = 255;
-  }
+  update() {}
 }
 class Strips {
   constructor() {
+    let myWidth = height / 32;
     this.strips = [];
-    let myWidth = 100;
-    for (var y = -height / 2; y < height + myWidth / 2; y += myWidth) {
-      // constructor(x, y, z, width, length, amplitude)
-      this.strips.push(new Strip(-width / 2, y, 0, myWidth, width, width / 10));
+    let y = -height / 2;
+    while (y < height + myWidth / 2) {
+      const inc = random(myWidth / 2, myWidth)
+      // constructor(x, y, z, width, length)
+      this.strips.push(new Strip(-width / 2, y, 0, inc, width));
+      y += inc;
     }
   }
   display() {

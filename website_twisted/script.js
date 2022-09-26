@@ -10,8 +10,9 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   textFont(myFont);
   background("black");
-  play = false;
+  play = true;
   strips = new Strips();
+  frameRate(10);
 }
 
 function draw() {
