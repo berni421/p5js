@@ -27,8 +27,8 @@ class Strip {
     rotateX(rotation);
     //
     // Lighting
-    let locX = mouseX - width / 2;
-    let locY = mouseY - height / 2;
+    // let locX = mouseX - width / 2;
+    // let locY = mouseY - height / 2;
     ambientLight(128, 128, 128);
     pointLight(255, 255, 255, -width / 2, -height / 2, width + height);
     pointLight(255, 255, 255, width / 2, height / 2, width + height);
