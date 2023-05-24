@@ -1,4 +1,5 @@
 // ref https://en.wikipedia.org/wiki/Barnsley_fern
+// https://github.com/freshfork/p5.EasyCam
 
 let bg = null;
 let accuracy = 2;
