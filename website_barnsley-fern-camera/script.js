@@ -7,12 +7,13 @@ let y = 0;
 let cam = null;
 
 function setup() {
-  createCanvas(1024, 1024, WEBGL);
+  createCanvas(displayWidth, displayHeight, WEBGL);
  
   bg = createGraphics(width * accuracy, height * accuracy);
   bg.background(16);
   bg.stroke("limegreen");
   cam = createEasyCam();
+
   // suppress right-click context menu
   document.oncontextmenu = function() { return false; }
   cam.setDistanceMin((width + height)/20);
