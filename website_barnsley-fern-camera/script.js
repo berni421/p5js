@@ -19,6 +19,9 @@ function setup() {
   document.oncontextmenu = function() { return false; }
   cam.setDistanceMin((width + height)/20);
   cam.setDistanceMax(width + height);
+
+  	// swap the handlers
+	cam.mouse.mouseDragLeft    = cam.mouseDragPan.bind(cam);    // mouseLeft now pans
 }
 
 function setBackground() {
