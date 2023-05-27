@@ -8,24 +8,25 @@ let y = 0;
 let cam = null;
 
 function setup() {
-  createCanvas(displayWidth, displayHeight, WEBGL);
- 
+  createCanvas(windowWidth, windowHeight, WEBGL);
+
   bg = createGraphics(width * accuracy, height * accuracy);
-  bg.background(16);
+  bg.background(32);
   bg.stroke("limegreen");
+
+  // Camera
   cam = createEasyCam();
 
   // suppress right-click context menu
-  document.oncontextmenu = function() { return false; }
-  cam.setDistanceMin((width + height)/20);
-  cam.setDistanceMax(width + height);
+  document.oncontextmenu = function () { return false; }
 
-  	// swap the handlers
-	cam.mouse.mouseDragLeft    = cam.mouseDragPan.bind(cam);    // mouseLeft now pans
-}
+  // Camera Controls
+  cam.setDistanceMin((width + height) * 0.05);
+  cam.setDistanceMax((width + height) * 1);
+  cam.setDistance((width + height) * 0.4);
 
-function setBackground() {
-  background(0);
+  // swap the handlers
+  cam.mouse.mouseDragLeft = cam.mouseDragPan.bind(cam);    // mouseLeft now pans
 }
 
 function nextPoint() {
@@ -57,9 +58,9 @@ function draw() {
   for (let i = 0; i < 1024; i++) {
     nextPoint();
     drawPoint();
-  }  
-  setBackground();
-  image(bg, -width/2, -height/2, width, height);
+  }
+  background(0);
+  image(bg, -width / 2, -height / 2, width, height);
 }
 
 function drawPoint() {
