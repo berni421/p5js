@@ -27,6 +27,7 @@ function setup() {
 
   // swap the handlers
   cam.mouse.mouseDragLeft = cam.mouseDragPan.bind(cam);    // mouseLeft now pans
+  cam.mouse.touchmoveSingle = cam.mouseDragPan.bind(cam);
 }
 
 function nextPoint() {
