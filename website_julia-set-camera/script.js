@@ -1,10 +1,11 @@
 var cam;
 var bg;
 const accuracy = 1.0;
-var xmin, ymin, maxiterations, xmax, ymax, dx, dy, x, y, i, j;
+
+var angle, maxiterations = 100, colorsRed = [], colorsGreen = [], colorsBlue = [];
 
 function setup() {
-  pixelDensity(1);
+  // pixelDensity(1);
   createCanvas(windowWidth, windowHeight, WEBGL);
 
   bg = createGraphics(width * accuracy, height * accuracy);
@@ -26,80 +27,75 @@ function setup() {
   cam.mouse.mouseDragLeft = cam.mouseDragPan.bind(cam);    // mouseLeft now pans
   cam.mouse.touchmoveSingle = cam.mouseDragPan.bind(cam);
 
-  setupMS();
+  setupJulia();
 }
 
-function setupMS() {
+function setupJulia() {
+  angle = 0;
+
+  // Maximum number of iterations for each point on the complex plane
+  maxiterations = 100;
+
+  colorMode(HSB, 1);
+
+  // Create the colors to be used for each possible iteration count
+  for (let i = 0; i < maxiterations; i++) {
+    let hu = sqrt(i / maxiterations);
+    let col = color(hu, 255, 150);
+    colorsRed[i] = red(col);
+    colorsGreen[i] = green(col);
+    colorsBlue[i] = blue(col);
+  }
+}
+
+function calculateJulia() {
+  let ca = cos(angle * 3.213); //sin(angle);
+  let cb = sin(angle);
+
+  angle += 0.02;
+
   // Establish a range of values on the complex plane
   // A different range will allow us to "zoom" in or out on the fractal
 
   // It all starts with the width, try higher or lower values
-  const w = 4;
-  const h = (w * bg.height) / bg.width;
+  //let w = abs(sin(angle)) * 5;
+  let w = 5;
+  let h = (w * bg.height) / bg.width;
 
   // Start at negative half the width and height
-  xmin = -w / 2;
-  ymin = -h / 2;
-
-  // Maximum number of iterations for each point on the complex plane
-  maxiterations = 8;
-  // Increment for maxinterations
-  dIterations = 4;
+  let xmin = -w / 2;
+  let ymin = -h / 2;
 
   // x goes from xmin to xmax
-  xmax = xmin + w;
+  let xmax = xmin + w;
   // y goes from ymin to ymax
-  ymax = ymin + h;
+  let ymax = ymin + h;
 
   // Calculate amount we increment x,y for each pixel
-  dx = (xmax - xmin) / (bg.width);
-  dy = (ymax - ymin) / (bg.height);
+  let dx = (xmax - xmin) / bg.width;
+  let dy = (ymax - ymin) / bg.height;
 
   // Start y
-  y = ymin;
-  j = 0
-}
+  let y = ymin;
+  for (let j = 0; j < bg.height; j++) {
+    // Start x
+    let x = xmin;
+    for (let i = 0; i < bg.width; i++) {
 
-function drawMS() {
-  if (j > bg.height) return;
-  // Start x
-  x = xmin;
-  for (let i = 0; i < bg.width; i++) {
-    // Now we test, as we iterate z = z^2 + cm does z tend towards infinity?
-    let a = x;
-    let b = y;
-    let n = 0;
-    while (n < maxiterations) {
-      const aa = a * a;
-      const bb = b * b;
-      const twoab = 2.0 * a * b;
-      a = aa - bb + x;
-      b = twoab + y;
-      // Infinty in our finite world is simple, let's just consider it 16
-      if (dist(aa, bb, 0, 0) > 16) {
-        break;  // Bail
-      }
-      n++;
+      plot(i, j, n);
+      x += dx;
     }
-    plot(i, j, n);
-    x += dx;
+    y += dy;
   }
-  y += dy;
-  j++;
+
 }
 
 function draw() {
   background(0);
-  drawMS();
+  calculateJulia();
   bg.updatePixels();
   image(bg, -width / 2, -height / 2, width, height);
-  if (j > bg.height) {
-    maxiterations += dIterations;
-    // Restart y
-    y = ymin;
-    j = 0;
-    print("maxiterations: ", maxiterations);
-  }
+  print(frameRate());
 }
 
 function plot(i, j, n) {
@@ -107,10 +103,10 @@ function plot(i, j, n) {
   // If we never got there, let's pick the color black
   let pix = (i + j * bg.width) * 4;
   if (n < maxiterations) {
-    const norm = map(n, 0, maxiterations, 0, 1);
-    bg.pixels[pix + 0] = 0;
-    bg.pixels[pix + 1] = map(norm, 0, 1, 0, 255);
-    bg.pixels[pix + 2] = 0;
+    // use the colors that we made in setup()
+    bg.pixels[pix + 0] = colorsRed[n];
+    bg.pixels[pix + 1] = colorsGreen[n];
+    bg.pixels[pix + 2] = colorsBlue[n];
   } else {
     bg.pixels[pix + 0] = 0;
     bg.pixels[pix + 1] = 0;
