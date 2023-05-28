@@ -81,7 +81,22 @@ function calculateJulia() {
     // Start x
     let x = xmin;
     for (let i = 0; i < bg.width; i++) {
-
+      // Now we test, as we iterate z = z^2 + cm does z tend towards infinity?
+      let a = x;
+      let b = y;
+      let n = 0;
+      while (n < maxiterations) {
+        let aa = a * a;
+        let bb = b * b;
+        // Infinity in our finite world is simple, let's just consider it 16
+        if (aa + bb > 4.0) {
+          break; // Bail
+        }
+        let twoab = 2.0 * a * b;
+        a = aa - bb + ca;
+        b = twoab + cb;
+        n++;
+      }
       plot(i, j, n);
       x += dx;
     }
